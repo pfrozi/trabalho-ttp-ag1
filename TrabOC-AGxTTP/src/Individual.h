@@ -14,7 +14,7 @@ class Individual
         Individual();
         virtual ~Individual();
 
-        void        SetLength(int len);
+        void        SetLengthChromo(int len);
         void        SetNTeams(int n);
 
         std::string GetChromosome();

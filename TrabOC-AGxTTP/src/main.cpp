@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
 
         std::cout << ga.GetCurrent() << endl;
 
-        ga.Solve();
+        //ga.Solve();
 
 
         return 0;

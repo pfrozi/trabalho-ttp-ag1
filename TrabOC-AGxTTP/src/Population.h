@@ -13,11 +13,18 @@ class Population
         Population();
         virtual ~Population();
 
+        void GenerateRandom(int length);
+
+        void SetNTeams(int n);
 
     protected:
 
     private:
 
+        int         nTeams;
+        int         rounds;
+
+        Individual* individuals;
 
 };
 

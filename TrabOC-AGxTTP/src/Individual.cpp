@@ -11,7 +11,7 @@ Individual::~Individual()
     //dtor
 }
 
-void Individual::SetLength(int len){
+void Individual::SetLengthChromo(int len){
 
     length = len;
     chromosome = new bool[length];
