@@ -13,6 +13,12 @@ class Individual
 
         Individual();
         virtual ~Individual();
+        bool operator ==(const Individual& i);
+        bool operator !=(const Individual& i);
+        bool operator >=(const Individual& i);
+        bool operator <=(const Individual& i);
+        bool operator  >(const Individual& i);
+        bool operator  <(const Individual& i);
 
         void        SetLengthChromo(int len);
         void        SetNTeams(int n);

@@ -8,34 +8,34 @@
 	<thread_db.h>
 	<string.h>
 
-1416682848 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Individual.cpp
+1416689034 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Individual.cpp
 	"Individual.h"
 
-1416682648 /home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Population.h
+1416687856 /home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Population.h
 	<iostream>
 	<list>
 	"Individual.h"
 
-1416682754 /home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Individual.h
+1416688640 /home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Individual.h
 	<vector>
 	<string>
 	<stdlib.h>
 	<time.h>
 
-1416682913 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Population.cpp
+1416685706 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/Population.cpp
 	"Population.h"
 
-1416679859 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/GaTTP.cpp
+1416685611 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/GaTTP.cpp
 	"GaTTP.h"
 
-1416679838 /home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/GaTTP.h
+1416684929 /home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/GaTTP.h
 	<iostream>
 	<list>
 	<time.h>
 	"Population.h"
 	"Util.h"
 
-1416682096 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/main.cpp
+1416683843 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/src/main.cpp
 	<iostream>
 	<list>
 	<vector>

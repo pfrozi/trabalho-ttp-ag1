@@ -55,7 +55,7 @@ class GaTTP
         time_t startTime;
         time_t endTime;
 
-        Population current;
+        Population* current;
 
         void selection(int length);                                     // Realiza a seleção dos individuos mais aptos da populacao
 

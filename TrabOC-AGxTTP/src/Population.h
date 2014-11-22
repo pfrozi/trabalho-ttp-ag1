@@ -15,16 +15,29 @@ class Population
 
         void GenerateRandom(int length);
 
+        void SetLength(int len);
         void SetNTeams(int n);
+        void CalcFitness();
+        void SelectParents();
 
     protected:
 
     private:
 
+        int         length;
         int         nTeams;
         int         rounds;
 
+        float       bestFitness;
+        float       worstFitness;
+        float       avgFitness;
+
+        Individual* bestIndividual;
         Individual* individuals;
+
+        std::list<Individual*> bestParents;
+
+        void setBestIndividual(Individual* i);
 
 };
 

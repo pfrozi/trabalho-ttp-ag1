@@ -8,8 +8,35 @@ Individual::Individual()
 
 Individual::~Individual()
 {
-    //dtor
+    delete chromosome;
 }
+
+
+bool Individual::operator ==(const Individual& i)
+{
+    return (fitness == i.fitness);
+}
+bool Individual::operator !=(const Individual& i)
+{
+    return (fitness != i.fitness);
+}
+bool Individual::operator >=(const Individual& i)
+{
+    return (fitness >= i.fitness);
+}
+bool Individual::operator <=(const Individual& i)
+{
+    return (fitness <= i.fitness);
+}
+bool Individual::operator >(const Individual& i)
+{
+    return (fitness > i.fitness);
+}
+bool Individual::operator <(const Individual& i)
+{
+    return (fitness < i.fitness);
+}
+
 
 void Individual::SetLengthChromo(int len){
 
@@ -38,4 +65,10 @@ void Individual::GenerateRdm(){
     }
 }
 
+float Individual::CheckFitness() {
+
+    //TODO:
+    return 0.0f;
+
+}
 

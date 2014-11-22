@@ -8,7 +8,7 @@ GaTTP::GaTTP()
 
 GaTTP::~GaTTP()
 {
-    //dtor
+    delete this;
 }
 
 
@@ -54,7 +54,7 @@ void GaTTP::GenerateInitial(int nPop){
 
     nPopIn = nPop;
 
-    //current.Population();
+    current->GenerateRandom(nPopIn);
 }
 
 void GaTTP::SetDistMatrix(std::string strMatrix){
