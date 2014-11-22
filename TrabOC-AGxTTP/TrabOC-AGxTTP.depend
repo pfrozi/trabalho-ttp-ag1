@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1416168078 source:/home/pedro/Documents/trabalhoOC/TrabOC-AGxTTP/main.cpp
+	<iostream>
+	<list>
+	<vector>
+	<stdio.h>
+	<stdlib.h>
+	<thread_db.h>
+	<string.h>
+
