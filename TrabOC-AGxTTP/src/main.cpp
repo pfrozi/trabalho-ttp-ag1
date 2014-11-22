@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <thread_db.h>
 #include <string.h>
+#include "GaTTP.h"
 
 /*
     CONSTS
@@ -26,6 +27,8 @@
 
 using namespace std;
 
+// Instancia do algoritmo
+GaTTP ga;
 
 // Parametros de entrada
 int   nTeams;
@@ -41,6 +44,9 @@ std::string outputFile;
 std::list<std::string> teams;                // Lista dos times considerados
 float** matrixDist;                          // Matriz de distancias entre as cidades dos times
 
+
+
+void setGa();
 
 
 std::vector<std::string> split(std::string str,std::string sep){
@@ -217,7 +223,7 @@ int main(int argc, char* argv[])
             }
         }
 
-
+        setGa();
 
 
 
@@ -226,11 +232,20 @@ int main(int argc, char* argv[])
     }
 
 
-
-
     cout << "Welcome to Solver of TTP with AG!\n" << endl;
 
 
 
     return 0;
+}
+
+void setGa(){
+
+    ga.SetNTeams(nTeams);
+    ga.SetNPopInitial(nPopIn);
+    ga.SetPRate(pRate);
+    ga.SetCRate(cRate);
+    ga.SetStopN(stopQuant);
+    ga.SetStopTime(stopTime);
+
 }

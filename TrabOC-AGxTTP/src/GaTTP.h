@@ -23,11 +23,27 @@ class GaTTP
         time_t GetStartTime();
         time_t GetEndTime();
 
+        void SetNTeams(int n);
+        void SetNPopInitial(int n);
+        void SetPRate(float rate);
+        void SetCRate(float rate);
+        void SetStopN(int n);
+        void SetStopTime(int minutes);
+
+
     protected:
 
 
 
     private:
+
+        // Parametros de entrada
+        int   nTeams;
+        int   nPopIn;
+        float pRate;
+        float cRate;
+        int   stopQuant;
+        int   stopTime;
 
         time_t startTime;
         time_t endTime;
