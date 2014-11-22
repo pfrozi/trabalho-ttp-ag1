@@ -9,13 +9,16 @@
 class Population
 {
     public:
-        
-        
-    
+
         Population();
         virtual ~Population();
+
+
     protected:
+
     private:
+
+
 };
 
 #endif // POPULATION_H

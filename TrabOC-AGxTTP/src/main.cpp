@@ -40,67 +40,12 @@ int   stopTime;
 
 
 std::string outputFile;
-
-std::list<std::string> teams;                // Lista dos times considerados
-float** matrixDist;                          // Matriz de distancias entre as cidades dos times
+std::string strDistMatrix;                   // String que representa a matriz de distancia entre as cidades dos times
 
 
 
 void setGa();
 
-
-std::vector<std::string> split(std::string str,std::string sep){
-
-    char* cstr=const_cast<char*>(str.c_str());
-    char* current;
-    std::vector<std::string> arr;
-    current=strtok(cstr,sep.c_str());
-    while(current!=NULL){
-        arr.push_back(current);
-        current=strtok(NULL,sep.c_str());
-    }
-    return arr;
-}
-
-void readMatrix(std::string strMatrix){
-
-    bool first_line = true;
-
-
-    std::vector<std::string> line = split(strMatrix,"/");
-
-    for (int i=0;i<line.size();i++){
-
-        std::vector<std::string> fields = split(line.at(i),",");
-
-
-        for (int j=0;j<fields.size();j++){
-
-            if(first_line){
-
-                teams.push_back(fields.at(j));
-
-            }
-            else{
-
-                if(j==0){
-
-                    matrixDist[i-1] = new float[teams.size()];
-                }
-                matrixDist[i-1][j] = atof(fields.at(j).c_str());
-
-            }
-
-        }
-
-        if(first_line){
-
-            matrixDist = new float*[teams.size()];
-            first_line = false;
-        }
-    }
-
-}
 
 std::string argStr(int arg){
 
@@ -211,7 +156,7 @@ int main(int argc, char* argv[])
 
                 } else if (argv[i] == argStr(ARGS_MATRIX)) {
 
-                    readMatrix(argv[i+1]);
+                    strDistMatrix = arg;
 
                 }  else {
 
@@ -226,6 +171,11 @@ int main(int argc, char* argv[])
         setGa();
 
 
+        ga.GenerateInitial();
+
+        std::cout << ga.GetCurrent() << endl;
+
+        ga.Solve();
 
 
         return 0;
@@ -247,5 +197,6 @@ void setGa(){
     ga.SetCRate(cRate);
     ga.SetStopN(stopQuant);
     ga.SetStopTime(stopTime);
+    ga.SetDistMatrix(strDistMatrix);
 
 }

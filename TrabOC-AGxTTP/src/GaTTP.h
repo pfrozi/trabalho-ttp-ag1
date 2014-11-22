@@ -4,6 +4,8 @@
 
 #include "Population.h"#include "Individual.h"
 
+#include "Util.h"
+
 #ifndef GATTP_H
 #define GATTP_H
 
@@ -14,7 +16,7 @@ class GaTTP
 
         GaTTP();
         virtual ~GaTTP();
-
+        void GenerateInitial();                         // Gera a população inicial que será utilizada pelo algoritimo
         void GenerateInitial(int length);               // Gera a população inicial que será utilizada pelo algoritimo
         void Solve();                                   // Processa o algoritmo até que os critérios de parada sejam aceitos
 
@@ -29,6 +31,7 @@ class GaTTP
         void SetCRate(float rate);
         void SetStopN(int n);
         void SetStopTime(int minutes);
+        void SetDistMatrix(std::string strMatrix);
 
 
     protected:
@@ -38,6 +41,10 @@ class GaTTP
     private:
 
         // Parametros de entrada
+
+        std::list<std::string> teams;                // Lista dos times considerados
+        float** matrixDist;                          // Matriz de distancias entre as cidades dos times
+
         int   nTeams;
         int   nPopIn;
         float pRate;
@@ -50,10 +57,11 @@ class GaTTP
 
         Population current;
 
-        void selection(int length);                         // Realiza a seleção dos individuos mais aptos da populacao
+        void selection(int length);                                     // Realiza a seleção dos individuos mais aptos da populacao
 
-        void mutate(float rate, Individual i, Individual i_mutated);   // Realiza o processo de mutação do individuo
-        void crossover(Individual i_a, Individual i_b); // Realiza o processo de crossover do individuo
+        void mutate(float rate, Individual i, Individual i_mutated);    // Realiza o processo de mutação do individuo
+        void crossover(Individual i_a, Individual i_b);                 // Realiza o processo de crossover do individuo
+
 };
 
 #endif // GATTP_H
