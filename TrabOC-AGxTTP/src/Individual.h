@@ -33,8 +33,11 @@ class Individual
     private:
 
         int         length;                  // Quantidade de alelos do individuo
-        int         nTeams;
+		int         nTeams;
         int         rounds;
+		bool 		initialized;
+		int*		truePositions;
+		int 		truePositionsLenght;
 
         std::string       strChromosome;      // Representacao da solucao
         bool*             chromosome;         // Representacao da solucao
