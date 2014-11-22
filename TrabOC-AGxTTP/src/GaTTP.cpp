@@ -1,12 +1,12 @@
 #include "GaTTP.h"
 
 
-CSurfaceB::GaTTP()
+GaTTP::GaTTP()
 {
     //ctor
 }
 
-CSurfaceB::~GaTTP()
+GaTTP::~GaTTP()
 {
     //dtor
 }

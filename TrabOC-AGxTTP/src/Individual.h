@@ -11,7 +11,7 @@ class Individual
         virtual ~Individual();
 
 
-        std::String GetCchromosome();
+        std::string GetChromosome();
         float       GetFitness();
 
         float       CheckFitness();     // Verifica / Calcula o valor da funcao fitness;
@@ -19,7 +19,7 @@ class Individual
     protected:
     private:
 
-        std::String chromosome;         // Representacao da solucao
+        std::string chromosome;         // Representacao da solucao
         float       fitness;            // Valor do fitness, Representa o resultado da funcao de fitness aplicada a instancia (cromossomo)
 
 };
