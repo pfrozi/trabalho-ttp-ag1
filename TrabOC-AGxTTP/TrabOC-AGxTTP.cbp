@@ -35,8 +35,12 @@
 		</Compiler>
 		<Unit filename="src/GaTTP.cpp" />
 		<Unit filename="src/GaTTP.h" />
+		<Unit filename="src/Individual.cpp" />
 		<Unit filename="src/Individual.h" />
+		<Unit filename="src/Population.cpp" />
 		<Unit filename="src/Population.h" />
+		<Unit filename="src/Util.cpp" />
+		<Unit filename="src/Util.h" />
 		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -24,7 +24,7 @@ void Individual::SetNTeams(int n){
 }
 void Individual::GenerateRdm(){
 
-    srand (time(NULL));
+    srand(time(NULL));
 
     for(int i=0; i<nTeams; i++){
 

@@ -1,3 +1,11 @@
+/*
+
+
+    Exemplo de instancia para N = 4:
+    traboc_ttpga -o test.sol -t 4 -T 3 -p 0.5 -c 0.4 -d 5 -s 5000 -m ATL,NYM,PHI,MON/0,745,665,929/745,0,80,337/665,80,0,380/929,337,380,0
+
+*/
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -168,8 +176,10 @@ int main(int argc, char* argv[])
             }
         }
 
-        setGa();
+        cout << "Welcome to Solver of TTP with AG!\n" << endl;
 
+
+        setGa();
 
         ga.GenerateInitial();
 
@@ -177,12 +187,9 @@ int main(int argc, char* argv[])
 
         //ga.Solve();
 
-
-        return 0;
     }
 
 
-    cout << "Welcome to Solver of TTP with AG!\n" << endl;
 
 
 

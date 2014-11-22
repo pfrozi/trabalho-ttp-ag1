@@ -24,8 +24,8 @@ void Population::GenerateRandom(int length){
 
     for(int l=0;l<length;l++){
 
-        Individual[l].SetLengthChromo(nTeams*nTeams*rounds);
-        Individual[l].SetNTeams(nTeams);
+        individuals[l].SetLengthChromo(nTeams*nTeams*rounds);
+        individuals[l].SetNTeams(nTeams);
 
     }
 
