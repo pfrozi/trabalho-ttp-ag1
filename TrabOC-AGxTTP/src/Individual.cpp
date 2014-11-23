@@ -194,8 +194,38 @@ int Individual::ValidateMatchsPerRound(){
 }
 
 int Individual::ValidateGameOneTime(){
-	GetTruePositionsInit();
-
+    GetTruePositionsInit();
+	int i = 0;
+    int j = 0;
+    int k = 0;
+    	
+    int i1 = 0;
+    int j1 = 0;
+    int k1 = 0;
+        
+    for(int index=0; index < truePositionsLenght; index+=3){
+        i = truePositions[index];
+    	j = truePositions[index+1];
+		k = truePositions[index+2];
+        
+        for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
+            if(jndex != index) {
+                i1 = truePositions[jndex];
+                j1 = truePositions[jndex+1];
+		        k1 = truePositions[jndex+2];
+                
+                if(k == k1) {
+                    if((i == i1) || (j == j1) || (i == j1) || (j == i1)) {
+                        cout << "ValidateGameOneTime: fault" << endl;
+            	        cout << "   Game " << i << "vs" << j << " and game " << i1 << "vs" << j1 << " can't happen in same round" << endl;
+                        return -1;
+                    }
+                }
+            }
+        }
+    }
+    
+	cout << "ValidateGameOneTime: ok" << endl;
 	return 0;
 }
 
