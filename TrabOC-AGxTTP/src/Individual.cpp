@@ -1,6 +1,5 @@
 #include "Individual.h"
 
-
 Individual::Individual()
 {
     //ctor
@@ -10,7 +9,6 @@ Individual::~Individual()
 {
     delete chromosome;
 }
-
 
 bool Individual::operator ==(const Individual& i)
 {
@@ -36,7 +34,6 @@ bool Individual::operator <(const Individual& i)
 {
     return (fitness < i.fitness);
 }
-
 
 void Individual::SetLengthChromo(int len){
 
@@ -107,7 +104,7 @@ float ObjectiveFunctionFirstRound() {
         firstRound[x] = 0;
     }
     firstRoundLength = x;
-    std::cout << "firstRoundLength: " << firstRoundLength <<endl;
+    //std::cout << "firstRoundLength: " << firstRoundLength <<endl;
         
     for(int index=0; index < truePositionsLenght; index+=3){
         i0 = truePositions[index];
@@ -124,11 +121,11 @@ float ObjectiveFunctionFirstRound() {
     }
     
     // print firstRound array
-    std::cout << "firstRound[]: ";
-    for(int i=0; i < firstRoundLength; i++){
-       std::cout << firstRound[i];
-    }
-    std::cout << std::endl;
+    //std::cout << "firstRound[]: ";
+    //for(int i=0; i < firstRoundLength; i++){
+    //   std::cout << firstRound[i];
+    //}
+    //std::cout << std::endl;
 	
     for(int x=0; x < firstRoundLength; x+=3){
         i0 = firstRound[x];
@@ -165,29 +162,29 @@ float ObjectiveFunctionMidleRounds() {
 
 				// time i0 viaja ate a casa de j1
 				if(i0 == j1){
-                    std::cout << "i0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
-                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+                    //std::cout << "i0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    //std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
 					total += float(matrixDist[i0][i1]);
 				}
 
 				// time j0 viaga para casa
 				if(j0 == i1){
-                    std::cout << "j0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
-                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+                    //std::cout << "j0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    //std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
 					total += float(matrixDist[i0][i1]);
 				}
 
 				// time j0 viaga para casa de i1
 				if(j0 == j1){
-                    std::cout << "j0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
-                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+                    //std::cout << "j0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    //std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
 					total += float(matrixDist[i0][i1]);
 				}
 
 				// i0 permanece em casa
 				if(i0 == i1) {
-					std::cout << "i0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
-                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+					//std::cout << "i0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    //std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
                     total += 0;
 				}
 			}
@@ -212,7 +209,7 @@ float ObjectiveFunctionLastRound() {
         lastRound[x] = 0;
     }
     lastRoundLength = x;
-    std::cout << "lastRoundLength: " << lastRoundLength <<endl;
+    //std::cout << "lastRoundLength: " << lastRoundLength <<endl;
         
     for(int index=0; index < truePositionsLenght; index+=3){
         i0 = truePositions[index];
@@ -229,17 +226,17 @@ float ObjectiveFunctionLastRound() {
     }
     
     // print lastRound array
-    std::cout << "lastRound[]: ";
-    for(int i=0; i < lastRoundLength; i++){
-       std::cout << lastRound[i];
-    }
-    std::cout << std::endl;
+    //std::cout << "lastRound[]: ";
+    //for(int i=0; i < lastRoundLength; i++){
+    //   std::cout << lastRound[i];
+    //}
+    //std::cout << std::endl;
 	
     for(int x=0; x < lastRoundLength; x+=3){
         i0 = lastRound[x];
         j0 = lastRound[x+1];
         k0 = lastRound[x+2];
-        std::cout << "lastRound total part: " << matrixDist[i0][j0] <<std::endl;
+        //std::cout << "lastRound total part: " << matrixDist[i0][j0] <<std::endl;
         total += matrixDist[i0][j0];
     }
     
