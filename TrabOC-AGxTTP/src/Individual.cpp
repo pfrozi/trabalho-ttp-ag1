@@ -72,13 +72,59 @@ void Individual::SetDistMatrix(float** matrix){
 }
 
 float Individual::CheckFitness() {
-
-    //TODO:
-    return 0.0f;
-
+    
 }
-bool initialized = false;
 
+float Individual::ObjectiveFunction() {
+	GetTruePositionsInit();
+	
+	float total = 0.0f;
+	
+	int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
+    	
+    int i1 = 0;
+    int j1 = 0;
+    int k1 = 0;
+        
+    for(int index=0; index < truePositionsLenght; index+=3){
+        i0 = truePositions[index];
+    	j0 = truePositions[index+1];
+		k0 = truePositions[index+2];
+        
+        for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
+            i1 = truePositions[jndex];
+            j1 = truePositions[jndex+1];
+		    k1 = truePositions[jndex+2];
+			
+			if(k0 + 1 == k1){
+				
+				// time i0 viaja ate a casa de j1
+				if(i0 == j1){
+					total += distance(i0, j1);
+				}
+				
+				// time j0 viaga para casa
+				if(j0 == i1){
+					total += distance(j0, i1);
+				}
+				
+				// time j0 viaga para casa de i1
+				if(j0 == j1){
+					total += distance(i0, i1);
+				}
+			
+				// i0 permanece em casa
+				//if(i0 == i1) {
+				//	total += 0;
+				//}
+			}
+		}
+	}
+    return total;
+}
+	
 int Individual::GetPosition(int i, int j, int k){
 	return i*nTeams*rounds+j*rounds+k;
 }
@@ -172,10 +218,10 @@ void Individual::GetTruePositionsInit() {
     truePositionsLenght = count;
 
     //for(int i=0; i < truePositionsLenght; i++){
-    //   cout << truePositions[i];
+    //   std::cout << truePositions[i];
     //}
-    //cout << endl;
-    //cout << "truePositionsLenght: " << truePositionsLenght << endl;
+    //std::cout << std::endl;
+    //std::cout << "truePositionsLenght: " << truePositionsLenght << std::endl;
 
 	initialized = true;
 }
@@ -235,11 +281,11 @@ int Individual::ValidateMatchsPerRound(){
 		j = truePositions[index+1];
 		k = truePositions[index+2];
 
-        //cout << "i j k:" << i << j << k << endl;
+        //std::cout << "i j k:" << i << j << k << std::endl;
 
         countk[k] = countk[k] + 1;
 
-        //cout << "countk[k]" << countk[0] << " " << countk[1] << " " << countk[2] << " " << countk[3] << " " << countk[4] << " " << countk[5] << " " << endl;
+        //std::cout << "countk[k]" << countk[0] << " " << countk[1] << " " << countk[2] << " " << countk[3] << " " << countk[4] << " " << countk[5] << " " << std::endl;
 
         if(countk[k] > nTeams/2) {
             std::cout << "ValidateMatchsPerRound: fault" << std::endl;
@@ -253,31 +299,32 @@ int Individual::ValidateMatchsPerRound(){
 	return 0;
 }
 
-int Individual::ValidateGameOneTime(){
+int Individual::ValidateOneGamePerTeamPerRound(){
     GetTruePositionsInit();
-	int i = 0;
-    int j = 0;
-    int k = 0;
+
+	int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
 
     int i1 = 0;
     int j1 = 0;
     int k1 = 0;
 
     for(int index=0; index < truePositionsLenght; index+=3){
-        i = truePositions[index];
-    	j = truePositions[index+1];
-		k = truePositions[index+2];
-
+        i0 = truePositions[index];
+    	j0 = truePositions[index+1];
+		k0 = truePositions[index+2];
+        
         for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
             if(jndex != index) {
                 i1 = truePositions[jndex];
                 j1 = truePositions[jndex+1];
 		        k1 = truePositions[jndex+2];
-
-                if(k == k1) {
-                    if((i == i1) || (j == j1) || (i == j1) || (j == i1)) {
-                        std::cout << "ValidateGameOneTime: fault" << std::endl;
-            	        std::cout << "   Game " << i << "vs" << j << " and game " << i1 << "vs" << j1 << " can't happen in same round" << std::endl;
+                
+                if(k0 == k1) {
+                    if((i0 == i1) || (j0 == j1) || (i0 == j1) || (j0 == i1)) {
+                        std::cout << "ValidateOneGamePerTeamPerRound: fault" << std::endl;
+            	        std::cout << "   Game " << i0 << "vs" << j0 << " and game " << i1 << "vs" << j1 << " can't happen in same round" << std::endl;
                         return -1;
                     }
                 }
@@ -286,6 +333,7 @@ int Individual::ValidateGameOneTime(){
     }
 
 	std::cout << "ValidateGameOneTime: ok" << std::endl;
+
 	return 0;
 }
 
