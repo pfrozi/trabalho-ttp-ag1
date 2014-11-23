@@ -67,13 +67,59 @@ void Individual::GenerateRdm(){
 }
 
 float Individual::CheckFitness() {
-
-    //TODO:
-    return 0.0f;
-
+    
 }
-bool initialized = false;
 
+float Individual::ObjectiveFunction() {
+	GetTruePositionsInit();
+	
+	float total = 0.0f;
+	
+	int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
+    	
+    int i1 = 0;
+    int j1 = 0;
+    int k1 = 0;
+        
+    for(int index=0; index < truePositionsLenght; index+=3){
+        i0 = truePositions[index];
+    	j0 = truePositions[index+1];
+		k0 = truePositions[index+2];
+        
+        for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
+            i1 = truePositions[jndex];
+            j1 = truePositions[jndex+1];
+		    k1 = truePositions[jndex+2];
+			
+			if(k0 + 1 == k1){
+				
+				// time i0 viaja ate a casa de j1
+				if(i0 == j1){
+					total += distance(i0, j1);
+				}
+				
+				// time j0 viaga para casa
+				if(j0 == i1){
+					total += distance(j0, i1);
+				}
+				
+				// time j0 viaga para casa de i1
+				if(j0 == j1){
+					total += distance(i0, i1);
+				}
+			
+				// i0 permanece em casa
+				//if(i0 == i1) {
+				//	total += 0;
+				//}
+			}
+		}
+	}
+    return total;
+}
+	
 int Individual::GetPosition(int i, int j, int k){
 	return i*nTeams*rounds+j*rounds+k;
 }
@@ -193,20 +239,20 @@ int Individual::ValidateMatchsPerRound(){
 	return 0;
 }
 
-int Individual::ValidateGameOneTime(){
+int Individual::ValidateOneGamePerTeamPerRound(){
     GetTruePositionsInit();
-	int i = 0;
-    int j = 0;
-    int k = 0;
+	int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
     	
     int i1 = 0;
     int j1 = 0;
     int k1 = 0;
         
     for(int index=0; index < truePositionsLenght; index+=3){
-        i = truePositions[index];
-    	j = truePositions[index+1];
-		k = truePositions[index+2];
+        i0 = truePositions[index];
+    	j0 = truePositions[index+1];
+		k0 = truePositions[index+2];
         
         for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
             if(jndex != index) {
@@ -214,10 +260,10 @@ int Individual::ValidateGameOneTime(){
                 j1 = truePositions[jndex+1];
 		        k1 = truePositions[jndex+2];
                 
-                if(k == k1) {
-                    if((i == i1) || (j == j1) || (i == j1) || (j == i1)) {
-                        cout << "ValidateGameOneTime: fault" << endl;
-            	        cout << "   Game " << i << "vs" << j << " and game " << i1 << "vs" << j1 << " can't happen in same round" << endl;
+                if(k0 == k1) {
+                    if((i0 == i1) || (j0 == j1) || (i0 == j1) || (j0 == i1)) {
+                        cout << "ValidateOneGamePerTeamPerRound: fault" << endl;
+            	        cout << "   Game " << i0 << "vs" << j0 << " and game " << i1 << "vs" << j1 << " can't happen in same round" << endl;
                         return -1;
                     }
                 }
@@ -225,7 +271,7 @@ int Individual::ValidateGameOneTime(){
         }
     }
     
-	cout << "ValidateGameOneTime: ok" << endl;
+	cout << "ValidateOneGamePerTeamPerRound: ok" << endl;
 	return 0;
 }
 
