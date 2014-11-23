@@ -30,7 +30,9 @@ void Population::GenerateRandom(int length){
 
         individuals[l].SetLengthChromo(nTeams*nTeams*rounds);
         individuals[l].SetNTeams(nTeams);
+        individuals[l].SetDistMatrix(matrixDist);
 
+        individuals[l].GenerateRdm();
     }
 
 }

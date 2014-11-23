@@ -91,6 +91,60 @@ void Individual::SetPositionValue(int i, int j, int k, int value){
 	chromosome[GetPosition(i,j,k)] = value;
 }
 
+Individual Individual::Crossover(Individual individual){
+
+    Individual newIndividual;
+
+    newIndividual.SetLengthChromo(nTeams*nTeams*rounds);
+    newIndividual.SetNTeams(nTeams);
+    newIndividual.SetDistMatrix(matrixDist);
+
+    for(int i=0;i<length;i++){
+
+        if(i<length/2){
+            newIndividual.SetAllele(i,chromosome[i]);
+        }
+        else{
+            newIndividual.SetAllele(i,individual.GetAllele(i));
+        }
+    }
+
+    return newIndividual;
+}
+
+Individual Individual::Mutate(float mRate){
+
+    Individual newIndividual;
+
+    newIndividual.SetLengthChromo(nTeams*nTeams*rounds);
+    newIndividual.SetNTeams(nTeams);
+    newIndividual.SetDistMatrix(matrixDist);
+
+    for(int i=0;i<length;i++){
+
+        if(GetRdmBool(mRate)){
+            newIndividual.SetAllele(i,!chromosome[i]);
+        }
+        else{
+            newIndividual.SetAllele(i,chromosome[i]);
+        }
+    }
+
+    return newIndividual;
+
+}
+
+void Individual::SetAllele(int index, bool value){
+
+    chromosome[index] = value;
+
+}
+bool Individual::GetAllele(int index){
+
+    return chromosome[index];
+
+}
+
 void Individual::GetTruePositionsInit() {
 
     if(initialized) return;
@@ -277,12 +331,12 @@ int Individual::ValidateMaxThreeGamesHome(){
 
                             if((k2+1 == k3) && (i0 == i3)) {
 
-                                cout << "ValidateMaxThreeGamesHome: fault" << endl;
-                	            cout << "   Games " << i0 << "vs" << j0 << ", ";
-                                cout << i1 << "vs" << j1 << ", ";
-                                cout << i2 << "vs" << j2 << ", ";
-                                cout << i3 << "vs" << j3 << ", ";
-                                cout << " can't happen in sequence" << endl;
+                                std::cout << "ValidateMaxThreeGamesHome: fault" << std::endl;
+                	            std::cout << "   Games " << i0 << "vs" << j0 << ", ";
+                                std::cout << i1 << "vs" << j1 << ", ";
+                                std::cout << i2 << "vs" << j2 << ", ";
+                                std::cout << i3 << "vs" << j3 << ", ";
+                                std::cout << " can't happen in sequence" << std::endl;
                                 return -1;
                             }
                         }
@@ -292,7 +346,7 @@ int Individual::ValidateMaxThreeGamesHome(){
         }
     }
 
-	cout << "ValidateMaxThreeGamesHome: ok" << endl;
+	std::cout << "ValidateMaxThreeGamesHome: ok" << std::endl;
 	return 0;
 }
 
@@ -338,12 +392,12 @@ int Individual::ValidateMaxThreeGamesOut(){
 
                             if((k2+1 == k3) && (j0 == j3)) {
 
-                                cout << "ValidateMaxThreeGamesOut: fault" << endl;
-                	            cout << "   Games " << i0 << "vs" << j0 << ", ";
-                                cout << i1 << "vs" << j1 << ", ";
-                                cout << i2 << "vs" << j2 << ", ";
-                                cout << i3 << "vs" << j3 << ", ";
-                                cout << " can't happen in sequence" << endl;
+                                std::cout << "ValidateMaxThreeGamesOut: fault" << std::endl;
+                	            std::cout << "   Games " << i0 << "vs" << j0 << ", ";
+                                std::cout << i1 << "vs" << j1 << ", ";
+                                std::cout << i2 << "vs" << j2 << ", ";
+                                std::cout << i3 << "vs" << j3 << ", ";
+                                std::cout << " can't happen in sequence" << std::endl;
                                 return -1;
                             }
                         }
@@ -353,7 +407,7 @@ int Individual::ValidateMaxThreeGamesOut(){
         }
     }
 
-	cout << "ValidateMaxThreeGamesOut: ok" << endl;
+	std::cout << "ValidateMaxThreeGamesOut: ok" << std::endl;
 	return 0;
 }
 
@@ -380,17 +434,17 @@ int Individual::ValidatePlayEachOtherAgain(){
             if(k0+1 == k1){
                 if(i0 == j1 && i1 == j0)
                 {
-                    cout << "ValidatePlayEachOtherAgain: fault" << endl;
-                    cout << "   Games " << i0 << "vs" << j0 << " and ";
-                    cout << i1 << "vs" << j1 << ", ";
-                    cout << " can't happen in sequence" << endl;
+                    std::cout << "ValidatePlayEachOtherAgain: fault" << std::endl;
+                    std::cout << "   Games " << i0 << "vs" << j0 << " and ";
+                    std::cout << i1 << "vs" << j1 << ", ";
+                    std::cout << " can't happen in sequence" << std::endl;
                     return -1;
                 }
             }
         }
     }
 
-	cout << "ValidatePlayEachOtherAgain: ok" << endl;
+	std::cout << "ValidatePlayEachOtherAgain: ok" << std::endl;
 	return 0;
 }
 
