@@ -70,6 +70,8 @@ class Individual
         int         ValidateMaxThreeGamesHome();
         int         ValidateMaxThreeGamesOut();
         int         ValidatePlayEachOtherAgain();
+        float       ObjectiveFunction();
+        int         ValidateOneGamePerTeamPerRound();
 };
 
 #endif // INDIVIDUAL_H

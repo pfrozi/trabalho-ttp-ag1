@@ -9,7 +9,7 @@ Population::Population()
 Population::~Population()
 {
     //delete bestIndividual;
-    delete individuals;
+    //delete individuals;
     delete this;
 }
 
@@ -23,8 +23,6 @@ void Population::SetNTeams(int n){
 void Population::GenerateRandom(int length){
 
     SetLength(length);
-
-    individuals = new Individual[length];
 
     for(int l=0;l<length;l++){
 
@@ -66,6 +64,7 @@ void Population::CalcFitness(){
 void Population::SetLength(int len){
 
     length = len;
+    //individuals = new Individual[length];
 
 }
 void Population::setBestIndividual(Individual i){
@@ -144,9 +143,46 @@ void Population::SetDistMatrix(float** matrix){
     matrixDist = matrix;
 }
 
-Population Population::GenerateNewPopulation(){
+float Population::GetBestFitness()
+{
+    return bestFitness;
+}
 
+Population* Population::GenerateNewPopulation(){
+
+    Population* newPopulation = new Population;
+
+    int newLength = bestParents.size()+childCrossover.size()+childMutation.size();
+
+    newPopulation->SetLength(newLength);
+    newPopulation->SetNTeams(nTeams);
+    newPopulation->SetDistMatrix(matrixDist);
+
+
+    std::list<Individual>::iterator it;
+    for(it =  bestParents.begin();it!=bestParents.end();++it){
+        newPopulation->CopyIndividual(*it);
+    }
+    for(int i=0;i<childCrossover.size();i++){
+        newPopulation->CopyIndividual(childCrossover[i]);
+    }
+    for(int j=0;j<childMutation.size();j++){
+        newPopulation->CopyIndividual(childMutation[j]);
+    }
+
+    return newPopulation;
 
 
 }
 
+void Population::CopyIndividual(Individual individual){
+
+    individuals.push_back(individual);
+
+}
+
+Individual Population::GetBestIndividual(){
+
+    return bestIndividual;
+
+}
