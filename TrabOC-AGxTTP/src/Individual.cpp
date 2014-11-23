@@ -75,7 +75,7 @@ float Individual::CheckFitness() {
 bool initialized = false;
 
 int Individual::GetPosition(int i, int j, int k){
-	return i*rounds*rounds+j*rounds+k;
+	return i*nTeams*rounds+j*rounds+k;
 }
 
 int Individual::GetPositionValue(int i, int j, int k){
@@ -89,7 +89,7 @@ void Individual::SetPositionValue(int i, int j, int k, int value){
 void Individual::GetTruePositions() {
 
 	if(initialized) return;
-	
+
 	int count = 0;
 	for(int i=0; i < nTeams; i++){
 		for(int j=0; j < nTeams; j++){
@@ -103,9 +103,9 @@ void Individual::GetTruePositions() {
 			}
 		}
 	}
-	
+
 	truePositionsLenght = (sizeof(truePositions)/sizeof(*truePositions))
-	
+
 	initialized = true;
 }
 
@@ -130,7 +130,7 @@ int Individual::ValidatePlayYourself(){
 		k = truePositions[index+2];
 
 		if(i = j) return -1;
-		
+
 		index += 3
 	}
 	return 0;
@@ -139,7 +139,7 @@ int Individual::ValidatePlayYourself(){
 int Individual::ValidateMatchsPerRound(){
 	GetTruePositions();
 	int countk[rounds] = { 0 };
-	
+
 	int index = 0
 	while(index < truePositionsLenght) {
 		i = truePositions[index];
@@ -148,10 +148,10 @@ int Individual::ValidateMatchsPerRound(){
 
 		countk[k] += 1;
 		if(countk[k] > nTeams/2) return -1
-		
+
 		index += 3
 	}
-	
+
 	return 0;
 }
 
@@ -187,7 +187,7 @@ int Individual::ValidateOneGame(){
 					{
 						//0, 1, 0 = true
 						if(GetPositionValue(i,j,k))
-					}				
+					}
 				}
 			}
 		}
