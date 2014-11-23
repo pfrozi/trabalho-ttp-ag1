@@ -75,7 +75,7 @@ float Individual::CheckFitness() {
 bool initialized = false;
 
 int Individual::GetPosition(int i, int j, int k){
-	return i*rounds*rounds+j*rounds+k;
+	return i*nTeams*rounds+j*rounds+k;
 }
 
 int Individual::GetPositionValue(int i, int j, int k){
