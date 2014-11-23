@@ -72,12 +72,75 @@ void Individual::SetDistMatrix(float** matrix){
 }
 
 float Individual::CheckFitness() {
-    
+    float total = 0.0f;
+	float fo = ObjectiveFunction();
+	int playYourself = ValidatePlayYourself();
+	int matchsPerRound = ValidateMatchsPerRound();
+	int oneGamePerTeamPerRound = ValidateOneGamePerTeamPerRound();
+	int maxThreeGamesHome = ValidateMaxThreeGamesHome();
+	int maxThreeGamesOut = ValidateMaxThreeGamesOut();
+	int playEachOtherAgain = ValidatePlayEachOtherAgain();
+	
+	total += playYourself * 		100000000000000000;
+	total += matchsPerRound * 		 10000000000000000;
+	total += oneGamePerTeamPerRound * 1000000000000000;
+	total += maxThreeGamesHome * 	   100000000000000;
+	total += maxThreeGamesOut * 		10000000000000;
+	total += playEachOtherAgain * 		 1000000000000;
+	total += fo;
+	
+	return total;
 }
 
-float Individual::ObjectiveFunction() {
-	GetTruePositionsInit();
+float ObjectiveFunctionFirstRound() {
+    float total = 0.0f;
+    
+    int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
+    
+    int firstRoundIndex = 0;
+    int firstRound[120];
+    int firstRoundLength = 0;
+    int x = 0;
+    for (x = 0; x < (nTeams/2) * 3; x++){
+        firstRound[x] = 0;
+    }
+    firstRoundLength = x;
+    std::cout << "firstRoundLength: " << firstRoundLength <<endl;
+        
+    for(int index=0; index < truePositionsLenght; index+=3){
+        i0 = truePositions[index];
+        j0 = truePositions[index+1];
+    	k0 = truePositions[index+2];
+    
+        // store i,j,k of first round
+        if(k0 == 0) {
+            firstRound[firstRoundIndex] = i0;
+            firstRound[firstRoundIndex+1] = j0;
+            firstRound[firstRoundIndex+2] = k0;
+            firstRoundIndex += 3;
+        }
+    }
+    
+    // print firstRound array
+    std::cout << "firstRound[]: ";
+    for(int i=0; i < firstRoundLength; i++){
+       std::cout << firstRound[i];
+    }
+    std::cout << std::endl;
 	
+    for(int x=0; x < firstRoundLength; x+=3){
+        i0 = firstRound[x];
+        j0 = firstRound[x+1];
+        k0 = firstRound[x+2];
+        total += matrixDist[i0][j0];
+    }
+
+    return total;
+}
+
+float ObjectiveFunctionMidleRounds() {
 	float total = 0.0f;
 	
 	int i0 = 0;
@@ -87,7 +150,7 @@ float Individual::ObjectiveFunction() {
     int i1 = 0;
     int j1 = 0;
     int k1 = 0;
-        
+    
     for(int index=0; index < truePositionsLenght; index+=3){
         i0 = truePositions[index];
     	j0 = truePositions[index+1];
@@ -102,26 +165,102 @@ float Individual::ObjectiveFunction() {
 				
 				// time i0 viaja ate a casa de j1
 				if(i0 == j1){
-					total += distance(i0, j1);
+                    std::cout << "i0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+					total += float(matrixDist[i0][i1]);
 				}
 				
 				// time j0 viaga para casa
 				if(j0 == i1){
-					total += distance(j0, i1);
+                    std::cout << "j0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+					total += float(matrixDist[i0][i1]);
 				}
 				
 				// time j0 viaga para casa de i1
 				if(j0 == j1){
-					total += distance(i0, i1);
+                    std::cout << "j0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+					total += float(matrixDist[i0][i1]);
 				}
 			
 				// i0 permanece em casa
-				//if(i0 == i1) {
-				//	total += 0;
-				//}
+				if(i0 == i1) {
+					std::cout << "i0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
+                    std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
+                    total += 0;
+				}
 			}
 		}
 	}
+    
+    return total;
+}
+
+float ObjectiveFunctionLastRound() {
+    float total = 0.0f;
+    
+    int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
+    
+    int lastRoundIndex = 0;
+    int lastRound[120];
+    int lastRoundLength = 0;
+    int x = 0;
+    for (x = 0; x < (nTeams/2) * 3; x++){
+        lastRound[x] = 0;
+    }
+    lastRoundLength = x;
+    std::cout << "lastRoundLength: " << lastRoundLength <<endl;
+        
+    for(int index=0; index < truePositionsLenght; index+=3){
+        i0 = truePositions[index];
+        j0 = truePositions[index+1];
+		k0 = truePositions[index+2];
+    
+        // store i,j,k of last round
+        if(k0 == rounds-1) {
+            lastRound[lastRoundIndex] = i0;
+            lastRound[lastRoundIndex+1] = j0;
+            lastRound[lastRoundIndex+2] = k0;
+            lastRoundIndex += 3;
+        }
+    }
+    
+    // print lastRound array
+    std::cout << "lastRound[]: ";
+    for(int i=0; i < lastRoundLength; i++){
+       std::cout << lastRound[i];
+    }
+    std::cout << std::endl;
+	
+    for(int x=0; x < lastRoundLength; x+=3){
+        i0 = lastRound[x];
+        j0 = lastRound[x+1];
+        k0 = lastRound[x+2];
+        std::cout << "lastRound total part: " << matrixDist[i0][j0] <<std::endl;
+        total += matrixDist[i0][j0];
+    }
+    
+    return total;
+}
+
+float ObjectiveFunction() {
+    GetTruePositionsInit();    
+	
+    float total = 0.0f;
+    float firstRound = ObjectiveFunctionFirstRound();
+    float midleRounds = ObjectiveFunctionMidleRounds();
+    float lastRound = ObjectiveFunctionLastRound();
+    
+    total += firstRound + midleRounds + lastRound;
+    
+    std::cout << "firstRound: " << firstRound << endl;
+    std::cout << "midleRounds: " << midleRounds << endl;
+    std::cout << "lastRound: " << lastRound << endl;
+    std::cout << "total: " << total << endl;
+    
     return total;
 }
 	
@@ -200,7 +339,7 @@ int Individual::ValidatePlayYourself(){
         if(i == j) {
             std::cout << "ValidatePlayYourself: fault" << std::endl;
 			std::cout << "	i==j:" << i << j << std::endl;
-            return -1;
+            return 1;
         }
 
 		index += 3;
@@ -216,8 +355,7 @@ int Individual::ValidateMatchsPerRound(){
     int k = 0;
 	int countk[rounds];
 
-    int x;
-    for (x = 0; x < rounds; x++){
+    for (int x = 0; x < rounds; x++){
       countk[x] = 0;
     }
 
@@ -236,7 +374,7 @@ int Individual::ValidateMatchsPerRound(){
         if(countk[k] > nTeams/2) {
             std::cout << "ValidateMatchsPerRound: fault" << std::endl;
     		std::cout << "   Round " << k << " have more then " << (nTeams/2) << " games" << std::endl;
-            return -1;
+            return 1;
 		}
 
 		index += 3;
@@ -271,7 +409,7 @@ int Individual::ValidateOneGamePerTeamPerRound(){
                     if((i0 == i1) || (j0 == j1) || (i0 == j1) || (j0 == i1)) {
                         std::cout << "ValidateOneGamePerTeamPerRound: fault" << std::endl;
             	        std::cout << "   Game " << i0 << "vs" << j0 << " and game " << i1 << "vs" << j1 << " can't happen in same round" << std::endl;
-                        return -1;
+                        return 1;
                     }
                 }
             }
@@ -331,7 +469,7 @@ int Individual::ValidateMaxThreeGamesHome(){
                                 std::cout << i2 << "vs" << j2 << ", ";
                                 std::cout << i3 << "vs" << j3 << ", ";
                                 std::cout << " can't happen in sequence" << std::endl;
-                                return -1;
+                                return 1;
                             }
                         }
                     }
@@ -392,7 +530,7 @@ int Individual::ValidateMaxThreeGamesOut(){
                                 std::cout << i2 << "vs" << j2 << ", ";
                                 std::cout << i3 << "vs" << j3 << ", ";
                                 std::cout << " can't happen in sequence" << std::endl;
-                                return -1;
+                                return 1;
                             }
                         }
                     }
@@ -432,7 +570,7 @@ int Individual::ValidatePlayEachOtherAgain(){
                     std::cout << "   Games " << i0 << "vs" << j0 << " and ";
                     std::cout << i1 << "vs" << j1 << ", ";
                     std::cout << " can't happen in sequence" << std::endl;
-                    return -1;
+                    return 1;
                 }
             }
         }
