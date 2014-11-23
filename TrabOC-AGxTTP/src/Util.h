@@ -9,6 +9,6 @@
 
 
 std::vector<std::string> split(std::string str,std::string sep);
-void readMatrix(std::string strMatrix, std::list<std::string> header, float** matrix);
+float** readMatrix(std::string strMatrix, std::vector<std::string> header, float** matrix);
 bool GetRdmBool(float p);
 int  GetRdmInt(int begin, int end);

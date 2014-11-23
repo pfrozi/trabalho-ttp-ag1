@@ -45,7 +45,7 @@ class GaTTP
 
         // Parametros de entrada
 
-        std::list<std::string> teams;                // Lista dos times considerados
+        std::vector<std::string> teams;              // Lista dos times considerados
         float** matrixDist;                          // Matriz de distancias entre as cidades dos times
 
         int   nTeams;

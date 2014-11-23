@@ -8,7 +8,7 @@ Individual::Individual()
 
 Individual::~Individual()
 {
-    delete chromosome;
+    //delete chromosome;
 }
 
 
@@ -42,6 +42,9 @@ void Individual::SetLengthChromo(int len){
 
     length = len;
     chromosome = new bool[length];
+
+    for(int i=0;i<length;i++) chromosome[i]=false;
+
 }
 
 void Individual::SetNTeams(int n){
@@ -58,9 +61,11 @@ void Individual::GenerateRdm(){
 
         for(int j=0; j<nTeams; j++){
 
-            int k = rand() % rounds;
-            SetPositionValue(i,j,k, true);
+            if(i!=j){
 
+                int k = rand() % rounds;
+                SetPositionValue(i,j,k, true);
+            }
         }
 
     }
@@ -72,7 +77,7 @@ void Individual::SetDistMatrix(float** matrix){
 }
 
 float Individual::CheckFitness() {
-
+    return (float)GetRdmInt(0,10000)*1.0f/(float)GetRdmInt(0,1000);
 }
 
 float Individual::ObjectiveFunction() {
@@ -496,3 +501,46 @@ int Individual::ValidatePlayEachOtherAgain(){
 	return 0;
 }
 
+std::string Individual::ToString(){
+
+    std::stringstream out;
+    out << "--------------------------------/nCromossomo: ";
+
+    for(int i=0;i<length;i++){
+
+        if(chromosome[i]){
+            out << "1";
+        }
+        else {
+            out << "0";
+        }
+
+    }
+
+    out << "\n";
+    out << "Fitness: ";
+    out << fitness;
+    out << "\n";
+    out << "--- Representacao da Solucao ---\n";
+
+    for(int k=0;k<rounds;k++){
+
+        out << "Rodada " << (k+1) << ":\n";
+
+        for(int i=0;i<nTeams;i++){
+            for(int j=0;j<nTeams;j++){
+
+                if((bool)GetPositionValue(i,j,k)){
+
+                    out << "Time " << (i+1) << " X Time " << (j+1) << "\n";
+
+                }
+
+            }
+        }
+    }
+
+    out << "--------------------------------/n";
+    return out.str();
+
+}

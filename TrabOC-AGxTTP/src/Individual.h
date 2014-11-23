@@ -3,6 +3,7 @@
 #include <string>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
+#include <sstream>
 
 #include "Util.h"
 
@@ -30,7 +31,7 @@ class Individual
         bool        GetAllele(int index);
         void        SetAllele(int index, bool value);
 
-        std::string GetChromosome();
+        std::string ToString();
         float       GetFitness();
         float       CheckFitness();     // Verifica / Calcula o valor da funcao fitness;
 
@@ -72,6 +73,8 @@ class Individual
         int         ValidatePlayEachOtherAgain();
         float       ObjectiveFunction();
         int         ValidateOneGamePerTeamPerRound();
+
+
 };
 
 #endif // INDIVIDUAL_H

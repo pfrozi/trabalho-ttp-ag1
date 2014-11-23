@@ -2,7 +2,7 @@
 #include <list>
 #include "Individual.h"
 #include <math.h>#include "Util.h"
-
+#include <limits>       // std::numeric_limits
 
 #ifndef POPULATION_H
 #define POPULATION_H
@@ -30,7 +30,7 @@ class Population
         float GetBestFitness();
         Individual GetBestIndividual();
 
-        void CopyIndividual(Individual individual);
+        void CopyIndividual(int index, Individual individual);
 
     protected:
 
@@ -45,8 +45,8 @@ class Population
         float       avgFitness;
 
         Individual bestIndividual;
-        //Individual* individuals;
-        std::vector<Individual> individuals;
+        Individual* individuals;
+        //std::vector<Individual> individuals;
 
         float** matrixDist;                          // Matriz de distancias entre as cidades dos times
 
@@ -57,6 +57,8 @@ class Population
 
         void setBestIndividual(Individual i);
         bool verifyStoppage();
+
+        void printParents();
 
 };
 

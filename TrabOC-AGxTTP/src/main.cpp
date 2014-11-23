@@ -2,7 +2,7 @@
 
 
     Exemplo de instancia para N = 4:
-    traboc_ttpga -o test.sol -t 4 -T 3 -p 0.5 -c 0.4 -d 5 -s 5000 -m ATL,NYM,PHI,MON/0,745,665,929/745,0,80,337/665,80,0,380/929,337,380,0
+    traboc_ttpga -o test.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 3 -s 5 -M ATL,NYM,PHI,MON/0,745,665,929/745,0,80,337/665,80,0,380/929,337,380,0
 
 */
 
@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <thread_db.h>
 #include <string.h>
+
+#include "Util.h"
 #include "GaTTP.h"
 
 /*
@@ -30,8 +32,9 @@
 #define ARGS_D      6      // Option para informar a quantidade maxima de geracoes sem melhora para o criterio de parada
 #define ARGS_S      7      // Option para o tempo maximo de execucao para o criterio de parada
 
+#define ARGS_M_RATE 8      // Option para informar a taxa de mutacao dentro de um cromossomo
 
-#define ARGS_MATRIX 8      // Option para informar a matrix de distancias que devera ser considerada
+#define ARGS_MATRIX 9      // Option para informar a matrix de distancias que devera ser considerada
 
 using namespace std;
 
@@ -43,6 +46,7 @@ int   nTeams;
 int   nPopIn;
 float pRate;
 float cRate;
+float mRate;
 int   stopQuant;
 int   stopTime;
 
@@ -90,9 +94,13 @@ std::string argStr(int arg){
 
             return "-s";
         }
-        case ARGS_MATRIX:{
+        case ARGS_M_RATE:{
 
             return "-m";
+        }
+        case ARGS_MATRIX:{
+
+            return "-M";
         }
     }
 
@@ -110,6 +118,7 @@ void help(){
 int main(int argc, char* argv[])
 {
 
+    cout << "Carrengando paramentros..." << endl;
     if (argc < ARGS_MAX || (argc==1 && !argv[1]==ARGS_HELP)) {
 
         cout << "Argumentos inválidos!\n" << endl;
@@ -135,36 +144,48 @@ int main(int argc, char* argv[])
                 } else if (argv[i] == argStr(ARGS_OUTPUT)) {
 
                     outputFile = arg;
-
+                    cout << "Arquivo de saida carregado: " << outputFile << endl;
 
                 } else if (argv[i] == argStr(ARGS_TEAMS)) {
 
 
                     nTeams = atoi(arg.c_str());
+                    cout << "Numero de times carregado: " << nTeams << endl;
 
                 } else if (argv[i] == argStr(ARGS_POP_IN)) {
 
                     nPopIn = atoi(arg.c_str());
+                    cout << "Tamanho da populacao inicial carregado: " << nPopIn << endl;
 
                 } else if (argv[i] == argStr(ARGS_P_RATE)) {
 
                     pRate = atof(arg.c_str());
+                    cout << "Taxa de filhos mutados carregado: " << pRate << endl;
 
                 } else if (argv[i] == argStr(ARGS_C_RATE)) {
 
                     cRate = atof(arg.c_str());
+                    cout << "Taxa de filhos com recombinacao carregado: " << cRate << endl;
 
                 } else if (argv[i] == argStr(ARGS_D)) {
 
                     stopQuant = atoi(arg.c_str());
+                    cout << "Criterio de parada por geracoes carregado: " << stopQuant << endl;
 
                 } else if (argv[i] == argStr(ARGS_S)) {
 
                     stopTime = atoi(arg.c_str());
+                    cout << "Criterio de parada por tempo(min) carregado: " << stopQuant << endl;
+
+                } else if (argv[i] == argStr(ARGS_M_RATE)) {
+
+                    mRate = atof(arg.c_str());
+                    cout << "Taxa de mutacao do cromossomo carregado: " << mRate << endl;
 
                 } else if (argv[i] == argStr(ARGS_MATRIX)) {
 
                     strDistMatrix = arg;
+                    cout << "Matriz de distancias carregado: " << strDistMatrix << endl;
 
                 }  else {
 
@@ -176,16 +197,12 @@ int main(int argc, char* argv[])
             }
         }
 
-        cout << "Welcome to Solver of TTP with AG!\n" << endl;
+        cout << "\nWelcome to Solver of TTP with AG!\n" << endl;
 
 
         setGa();
 
-        ga.GenerateInitial();
-
-        std::cout << ga.GetCurrent() << endl;
-
-        //ga.Solve();
+        ga.Solve();
 
     }
 
@@ -202,6 +219,7 @@ void setGa(){
     ga.SetNPopInitial(nPopIn);
     ga.SetPRate(pRate);
     ga.SetCRate(cRate);
+    ga.SetMRate(mRate);
     ga.SetStopN(stopQuant);
     ga.SetStopTime(stopTime);
     ga.SetDistMatrix(strDistMatrix);

@@ -20,7 +20,7 @@ GaTTP::~GaTTP()
 
 double GaTTP::TimeElapsedInMinutes(){
 
-    difftime(endTime, startTime);
+    return difftime(endTime, startTime)/60.0;
 
 }
 
@@ -81,7 +81,7 @@ void GaTTP::GenerateInitial(int nPop){
 
 void GaTTP::SetDistMatrix(std::string strMatrix){
 
-    readMatrix(strMatrix, teams, matrixDist);
+    matrixDist = readMatrix(strMatrix, teams, matrixDist);
 
 }
 
@@ -101,7 +101,7 @@ void GaTTP::nextGeneration(){
     delete current;
     current = newPop;
 
-    bestIndividual = newPop->GetBestIndividual();
+    //bestIndividual = newPop->GetBestIndividual();
 
     time(&endTime);
 
@@ -123,17 +123,20 @@ void GaTTP::Solve() {
 
         nextGeneration();
 
-    }while(verifyStoppage()); // verifica condicao de parada
+    }while(!verifyStoppage()); // verifica condicao de parada
 
 }
 
 bool GaTTP::verifyStoppage(){
 
     // Parada por tempo OU parada por quantidade de geracoes sem melhora
-    return((TimeElapsedInMinutes()>stopTime)||
-    (genNoImprov>stopQuant));
+    bool time = (TimeElapsedInMinutes()>stopTime);
+    bool gen = (genNoImprov>stopQuant);
+
+    return(time || gen);
 
 }
+
 
 std::string GaTTP::GetCurrent(){
 

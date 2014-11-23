@@ -14,7 +14,7 @@ std::vector<std::string> split(std::string str,std::string sep){
     return arr;
 }
 
-void readMatrix(std::string strMatrix, std::list<std::string> header, float** matrix){
+float** readMatrix(std::string strMatrix, std::vector<std::string> header, float** matrix){
 
     bool first_line = true;
 
@@ -52,6 +52,7 @@ void readMatrix(std::string strMatrix, std::list<std::string> header, float** ma
         }
     }
 
+    return matrix;
 }
 
 bool GetRdmBool(float p)
