@@ -142,48 +142,48 @@ float ObjectiveFunctionFirstRound() {
 
 float ObjectiveFunctionMidleRounds() {
 	float total = 0.0f;
-	
+
 	int i0 = 0;
     int j0 = 0;
     int k0 = 0;
-    	
+
     int i1 = 0;
     int j1 = 0;
     int k1 = 0;
-    
+
     for(int index=0; index < truePositionsLenght; index+=3){
         i0 = truePositions[index];
     	j0 = truePositions[index+1];
 		k0 = truePositions[index+2];
-        
+
         for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
             i1 = truePositions[jndex];
             j1 = truePositions[jndex+1];
 		    k1 = truePositions[jndex+2];
-			
+
 			if(k0 + 1 == k1){
-				
+
 				// time i0 viaja ate a casa de j1
 				if(i0 == j1){
                     std::cout << "i0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
                     std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
 					total += float(matrixDist[i0][i1]);
 				}
-				
+
 				// time j0 viaga para casa
 				if(j0 == i1){
                     std::cout << "j0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
                     std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
 					total += float(matrixDist[i0][i1]);
 				}
-				
+
 				// time j0 viaga para casa de i1
 				if(j0 == j1){
                     std::cout << "j0==jl -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
                     std::cout << "distancia: " << (matrixDist[i0][i1]) <<endl;
 					total += float(matrixDist[i0][i1]);
 				}
-			
+
 				// i0 permanece em casa
 				if(i0 == i1) {
 					std::cout << "i0==il -> i0j0k0: " << i0 << j0 << k0 << "  i1j1k1: " << i1 << j1 << k1 << endl;
@@ -263,7 +263,7 @@ float ObjectiveFunction() {
     
     return total;
 }
-	
+
 int Individual::GetPosition(int i, int j, int k){
 	return i*nTeams*rounds+j*rounds+k;
 }
@@ -274,6 +274,60 @@ int Individual::GetPositionValue(int i, int j, int k){
 
 void Individual::SetPositionValue(int i, int j, int k, int value){
 	chromosome[GetPosition(i,j,k)] = value;
+}
+
+Individual Individual::Crossover(Individual individual){
+
+    Individual newIndividual;
+
+    newIndividual.SetLengthChromo(nTeams*nTeams*rounds);
+    newIndividual.SetNTeams(nTeams);
+    newIndividual.SetDistMatrix(matrixDist);
+
+    for(int i=0;i<length;i++){
+
+        if(i<length/2){
+            newIndividual.SetAllele(i,chromosome[i]);
+        }
+        else{
+            newIndividual.SetAllele(i,individual.GetAllele(i));
+        }
+    }
+
+    return newIndividual;
+}
+
+Individual Individual::Mutate(float mRate){
+
+    Individual newIndividual;
+
+    newIndividual.SetLengthChromo(nTeams*nTeams*rounds);
+    newIndividual.SetNTeams(nTeams);
+    newIndividual.SetDistMatrix(matrixDist);
+
+    for(int i=0;i<length;i++){
+
+        if(GetRdmBool(mRate)){
+            newIndividual.SetAllele(i,!chromosome[i]);
+        }
+        else{
+            newIndividual.SetAllele(i,chromosome[i]);
+        }
+    }
+
+    return newIndividual;
+
+}
+
+void Individual::SetAllele(int index, bool value){
+
+    chromosome[index] = value;
+
+}
+bool Individual::GetAllele(int index){
+
+    return chromosome[index];
+
 }
 
 void Individual::GetTruePositionsInit() {
@@ -398,13 +452,13 @@ int Individual::ValidateOneGamePerTeamPerRound(){
         i0 = truePositions[index];
     	j0 = truePositions[index+1];
 		k0 = truePositions[index+2];
-        
+
         for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
             if(jndex != index) {
                 i1 = truePositions[jndex];
                 j1 = truePositions[jndex+1];
 		        k1 = truePositions[jndex+2];
-                
+
                 if(k0 == k1) {
                     if((i0 == i1) || (j0 == j1) || (i0 == j1) || (j0 == i1)) {
                         std::cout << "ValidateOneGamePerTeamPerRound: fault" << std::endl;
@@ -579,4 +633,3 @@ int Individual::ValidatePlayEachOtherAgain(){
 	std::cout << "ValidatePlayEachOtherAgain: ok" << std::endl;
 	return 0;
 }
-

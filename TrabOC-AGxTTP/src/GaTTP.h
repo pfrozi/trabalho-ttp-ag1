@@ -25,6 +25,8 @@ class GaTTP
         time_t GetStartTime();
         time_t GetEndTime();
 
+        double TimeElapsedInMinutes();
+
         void SetNTeams(int n);
         void SetNPopInitial(int n);
         void SetPRate(float rate);
@@ -55,16 +57,16 @@ class GaTTP
         int   stopQuant;
         int   stopTime;
 
-        time_t startTime;
-        time_t endTime;
+        time_t startTime, endTime;
 
         Population* current;
+        long        generation;
+        int         genNoImprov;
 
-        void selection(int length);                                     // Realiza a seleção dos individuos mais aptos da populacao
+        void nextGeneration();
+        bool verifyStoppage();
 
-        void mutate(float rate, Individual i, Individual i_mutated);    // Realiza o processo de mutação do individuo
-        void crossover(Individual i_a, Individual i_b);                 // Realiza o processo de crossover do individuo
-
+        Individual bestIndividual;
 };
 
 #endif // GATTP_H

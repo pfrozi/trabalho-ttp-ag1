@@ -25,7 +25,12 @@ class Population
 
         void SetDistMatrix(float** matrix);
 
-        Population GenerateNewPopulation();
+        Population* GenerateNewPopulation();
+
+        float GetBestFitness();
+        Individual GetBestIndividual();
+
+        void CopyIndividual(Individual individual);
 
     protected:
 
@@ -40,16 +45,18 @@ class Population
         float       avgFitness;
 
         Individual bestIndividual;
-        Individual* individuals;
+        //Individual* individuals;
+        std::vector<Individual> individuals;
 
         float** matrixDist;                          // Matriz de distancias entre as cidades dos times
 
-        std::list<Individual> bestParents;
+        std::list<Individual>   bestParents;
 
         std::vector<Individual> childCrossover;
         std::vector<Individual> childMutation;
 
         void setBestIndividual(Individual i);
+        bool verifyStoppage();
 
 };
 

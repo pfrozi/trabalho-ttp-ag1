@@ -4,6 +4,8 @@
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 
+#include "Util.h"
+
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
@@ -24,6 +26,9 @@ class Individual
         void        SetLengthChromo(int len);
         void        SetNTeams(int n);
         void        SetDistMatrix(float** matrix);
+
+        bool        GetAllele(int index);
+        void        SetAllele(int index, bool value);
 
         std::string GetChromosome();
         float       GetFitness();
@@ -63,6 +68,10 @@ class Individual
         int         ValidateGameOneTime();
         int         ValidateOneGame();
         int         ValidateMaxThreeGamesHome();
+        int         ValidateMaxThreeGamesOut();
+        int         ValidatePlayEachOtherAgain();
+        float       ObjectiveFunction();
+        int         ValidateOneGamePerTeamPerRound();
 };
 
 #endif // INDIVIDUAL_H
