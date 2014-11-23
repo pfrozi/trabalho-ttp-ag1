@@ -66,6 +66,11 @@ void Individual::GenerateRdm(){
     }
 }
 
+void Individual::SetDistMatrix(float** matrix){
+
+    matrixDist = matrix;
+}
+
 float Individual::CheckFitness() {
 
     //TODO:
@@ -120,6 +125,7 @@ void Individual::GetTruePositionsInit() {
 
 	initialized = true;
 }
+
 
 int Individual::GetTruePositions(int i, int j, int k){
     return i*9+j*3+k;
@@ -198,60 +204,61 @@ int Individual::ValidateGameOneTime(){
 	int i = 0;
     int j = 0;
     int k = 0;
-    	
+
     int i1 = 0;
     int j1 = 0;
     int k1 = 0;
-        
+
     for(int index=0; index < truePositionsLenght; index+=3){
         i = truePositions[index];
     	j = truePositions[index+1];
 		k = truePositions[index+2];
-        
+
         for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
             if(jndex != index) {
                 i1 = truePositions[jndex];
                 j1 = truePositions[jndex+1];
 		        k1 = truePositions[jndex+2];
-                
+
                 if(k == k1) {
                     if((i == i1) || (j == j1) || (i == j1) || (j == i1)) {
-                        cout << "ValidateGameOneTime: fault" << endl;
-            	        cout << "   Game " << i << "vs" << j << " and game " << i1 << "vs" << j1 << " can't happen in same round" << endl;
+                        std::cout << "ValidateGameOneTime: fault" << std::endl;
+            	        std::cout << "   Game " << i << "vs" << j << " and game " << i1 << "vs" << j1 << " can't happen in same round" << std::endl;
                         return -1;
                     }
                 }
             }
         }
     }
-    
-	cout << "ValidateGameOneTime: ok" << endl;
+
+	std::cout << "ValidateGameOneTime: ok" << std::endl;
 	return 0;
 }
 
 int Individual::ValidateMaxThreeGamesHome(){
+
     GetTruePositionsInit();
 	int i0 = 0;
     int j0 = 0;
     int k0 = 0;
-    	
+
     int i1 = 0;
     int j1 = 0;
     int k1 = 0;
-        
+
     int i2 = 0;
     int j2 = 0;
-    int k2 = 0;    
-        
+    int k2 = 0;
+
     int i3 = 0;
     int j3 = 0;
-    int k3 = 0;    
-        
+    int k3 = 0;
+
     for(int index=0; index < truePositionsLenght; index+=3){
         i0 = truePositions[index];
     	j0 = truePositions[index+1];
 		k0 = truePositions[index+2];
-        
+
         for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
             i1 = truePositions[jndex];
             j1 = truePositions[jndex+1];
@@ -262,21 +269,21 @@ int Individual::ValidateMaxThreeGamesHome(){
                     i2 = truePositions[xndex];
                     j2 = truePositions[xndex+1];
             	    k2 = truePositions[xndex+2];
-                    
+
                     if((k1 == k2+1) && (i0 == i2)) {
                         for(int zndex=0; zndex < truePositionsLenght; zndex+=3){
                             i3 = truePositions[zndex];
                             j3 = truePositions[zndex+1];
                             k3 = truePositions[zndex+2];
-        
+
                             if((k2 == k3+1) && (i0 == i3)) {
-        
-                                cout << "ValidateMaxThreeGamesHome: fault" << endl;
-                	            cout << "   Games " << i0 << "vs" << j0 << ", ";
-                                cout << i1 << "vs" << j1 << ", ";
-                                cout << i2 << "vs" << j2 << ", ";
-                                cout << i3 << "vs" << j3 << ", ";
-                                cout << " can't happen in sequence" << endl;
+
+                                std::cout << "ValidateMaxThreeGamesHome: fault" << std::endl;
+                	            std::cout << "   Games " << i0 << "vs" << j0 << ", ";
+                                std::cout << i1 << "vs" << j1 << ", ";
+                                std::cout << i2 << "vs" << j2 << ", ";
+                                std::cout << i3 << "vs" << j3 << ", ";
+                                std::cout << " can't happen in sequence" << std::endl;
                                 return -1;
                             }
                         }
@@ -285,8 +292,8 @@ int Individual::ValidateMaxThreeGamesHome(){
             }
         }
     }
-    
-	cout << "ValidateMaxThreeGamesHome: ok" << endl;
+
+	std::cout << "ValidateMaxThreeGamesHome: ok" << std::endl;
 	return 0;
 }
 

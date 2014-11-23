@@ -23,12 +23,16 @@ class Individual
 
         void        SetLengthChromo(int len);
         void        SetNTeams(int n);
+        void        SetDistMatrix(float** matrix);
 
         std::string GetChromosome();
         float       GetFitness();
         float       CheckFitness();     // Verifica / Calcula o valor da funcao fitness;
 
         void        GenerateRdm();
+
+        Individual  Crossover(Individual individual);
+        Individual  Mutate(float mRate);
 
     protected:
     private:
@@ -39,6 +43,8 @@ class Individual
 		bool 		initialized;
 		int*		truePositions;
 		int 		truePositionsLenght;
+
+		float**     matrixDist;               // Matriz de distancias entre as cidades dos times
 
         std::string       strChromosome;      // Representacao da solucao
         bool*             chromosome;         // Representacao da solucao
@@ -56,6 +62,7 @@ class Individual
         int         ValidateMatchsPerRound();
         int         ValidateGameOneTime();
         int         ValidateOneGame();
+        int         ValidateMaxThreeGamesHome();
 };
 
 #endif // INDIVIDUAL_H

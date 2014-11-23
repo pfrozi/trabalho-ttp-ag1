@@ -56,5 +56,13 @@ void readMatrix(std::string strMatrix, std::list<std::string> header, float** ma
 
 bool GetRdmBool(float p)
 {
+    srand(time(NULL));
     return (rand() / (double)RAND_MAX) < p;
+}
+
+int  GetRdmInt(int begin, int end){
+
+    srand(time(NULL));
+    return(begin + (rand() % (end - begin)));
+
 }
