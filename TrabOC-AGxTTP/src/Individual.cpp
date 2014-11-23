@@ -1,7 +1,7 @@
 #include "Individual.h"
 
 
-Individual::Individual() 
+Individual::Individual()
 {
     //ctor
 }
@@ -89,7 +89,7 @@ void Individual::SetPositionValue(int i, int j, int k, int value){
 void Individual::GetTruePositionsInit() {
 
     if(initialized) return;
-	
+
     int count = 0;
 
 	for(int i=0; i < nTeams; i++){
@@ -98,7 +98,7 @@ void Individual::GetTruePositionsInit() {
                 int value = GetPositionValue(i,j,k);
                 if(value == 1)
 				{
-					cout << "value 1 - i j k:" << i << j << k << endl;
+					std::cout << "value 1 - i j k:" << i << j << k << std::endl;
                     truePositions[count] = i;
                     count += 1;
 					truePositions[count] = j;
@@ -111,7 +111,7 @@ void Individual::GetTruePositionsInit() {
 	}
 
     truePositionsLenght = count;
-    
+
     //for(int i=0; i < truePositionsLenght; i++){
     //   cout << truePositions[i];
     //}
@@ -138,7 +138,7 @@ int Individual::ValidatePlayYourself(){
     int i = 0;
     int j = 0;
     int k = 0;
-	       
+
     int index = 0;
 	while(index < truePositionsLenght) {
 		i = truePositions[index];
@@ -146,14 +146,14 @@ int Individual::ValidatePlayYourself(){
 		k = truePositions[index+2];
 
         if(i == j) {
-            cout << "ValidatePlayYourself: fault" << endl;
-			cout << "	i==j:" << i << j << endl;
+            std::cout << "ValidatePlayYourself: fault" << std::endl;
+			std::cout << "	i==j:" << i << j << std::endl;
             return -1;
         }
-		
+
 		index += 3;
 	}
-	cout << "ValidatePlayYourself: ok" << endl;
+	std::cout << "ValidatePlayYourself: ok" << std::endl;
 	return 0;
 }
 
@@ -163,33 +163,33 @@ int Individual::ValidateMatchsPerRound(){
     int j = 0;
     int k = 0;
 	int countk[rounds];
-    
+
     int x;
     for (x = 0; x < rounds; x++){
       countk[x] = 0;
     }
-    	
+
 	int index = 0;
 	while(index < truePositionsLenght) {
 		i = truePositions[index];
 		j = truePositions[index+1];
 		k = truePositions[index+2];
-        
+
         //cout << "i j k:" << i << j << k << endl;
-    	
+
         countk[k] = countk[k] + 1;
-        
+
         //cout << "countk[k]" << countk[0] << " " << countk[1] << " " << countk[2] << " " << countk[3] << " " << countk[4] << " " << countk[5] << " " << endl;
 
         if(countk[k] > nTeams/2) {
-            cout << "ValidateMatchsPerRound: fault" << endl;
-    		cout << "   Round " << k << " have more then " << (nTeams/2) << " games" << endl;
+            std::cout << "ValidateMatchsPerRound: fault" << std::endl;
+    		std::cout << "   Round " << k << " have more then " << (nTeams/2) << " games" << std::endl;
             return -1;
 		}
-		
+
 		index += 3;
 	}
-	cout << "ValidateMatchsPerRound: ok" << endl;
+	std::cout << "ValidateMatchsPerRound: ok" << std::endl;
 	return 0;
 }
 
