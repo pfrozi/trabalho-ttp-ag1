@@ -75,7 +75,7 @@ float Individual::CheckFitness() {
 bool initialized = false;
 
 int Individual::GetPosition(int i, int j, int k){
-    return i*nTeams*rounds+j*rounds+k;
+	return i*nTeams*rounds+j*rounds+k;
 }
 
 int Individual::GetPositionValue(int i, int j, int k){
@@ -91,6 +91,7 @@ void Individual::GetTruePositionsInit() {
     if(initialized) return;
 	
     int count = 0;
+
 	for(int i=0; i < nTeams; i++){
 		for(int j=0; j < nTeams; j++){
 			for(int k=0; k < rounds; k++){
@@ -200,7 +201,6 @@ int Individual::ValidateGameOneTime(){
 
 int Individual::ValidateOneGame(){
 	GetTruePositionsInit();
-
 	return 0;
 }
 
