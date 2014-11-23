@@ -229,7 +229,7 @@ int Individual::ValidateGameOneTime(){
 	return 0;
 }
 
-int Individual::ValidateOneGameHome(){
+int Individual::ValidateMaxThreeGamesHome(){
     GetTruePositionsInit();
 	int i0 = 0;
     int j0 = 0;
@@ -271,7 +271,7 @@ int Individual::ValidateOneGameHome(){
         
                             if((k2 == k3+1) && (i0 == i3)) {
         
-                                cout << "ValidateOneGameHome: fault" << endl;
+                                cout << "ValidateMaxThreeGamesHome: fault" << endl;
                 	            cout << "   Games " << i0 << "vs" << j0 << ", ";
                                 cout << i1 << "vs" << j1 << ", ";
                                 cout << i2 << "vs" << j2 << ", ";
@@ -286,7 +286,7 @@ int Individual::ValidateOneGameHome(){
         }
     }
     
-	cout << "ValidateOneGameHome: ok" << endl;
+	cout << "ValidateMaxThreeGamesHome: ok" << endl;
 	return 0;
 }
 
