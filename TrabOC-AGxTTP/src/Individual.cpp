@@ -161,18 +161,28 @@ int Individual::ValidateMatchsPerRound(){
 	int i = 0;
     int j = 0;
     int k = 0;
-	int countk[] = { 0 };
-	
+	int countk[rounds];
+    
+    int x;
+    for (x = 0; x < rounds; x++){
+      countk[x] = 0;
+    }
+    	
 	int index = 0;
 	while(index < truePositionsLenght) {
 		i = truePositions[index];
 		j = truePositions[index+1];
 		k = truePositions[index+2];
+        
+        //cout << "i j k:" << i << j << k << endl;
+    	
+        countk[k] = countk[k] + 1;
+        
+        //cout << "countk[k]" << countk[0] << " " << countk[1] << " " << countk[2] << " " << countk[3] << " " << countk[4] << " " << countk[5] << " " << endl;
 
-		countk[k] += 1;
-		if(countk[k] > nTeams/2) {
+        if(countk[k] > nTeams/2) {
             cout << "ValidateMatchsPerRound: fault" << endl;
-    		cout << "	Round " << k << " have more then " << (nTeams/2) << " games" << endl;
+    		cout << "   Round " << k << " have more then " << (nTeams/2) << " games" << endl;
             return -1;
 		}
 		
