@@ -1,7 +1,7 @@
 #include <iostream>
 #include <list>
 #include "Individual.h"
-#include <math.h>
+#include <math.h>#include "Util.h"
 
 
 #ifndef POPULATION_H
@@ -23,6 +23,10 @@ class Population
         void ParentsCrossover(float cRate);
         void ParentsMutation(float pRate, float mRate);
 
+        void SetDistMatrix(float** matrix);
+
+        Population GenerateNewPopulation();
+
     protected:
 
     private:
@@ -35,14 +39,17 @@ class Population
         float       worstFitness;
         float       avgFitness;
 
-        Individual* bestIndividual;
+        Individual bestIndividual;
         Individual* individuals;
 
-        std::list<Individual*> bestParents;
-        std::list<Individual*> childCrossover;
-        std::list<Individual*> childMutation;
+        float** matrixDist;                          // Matriz de distancias entre as cidades dos times
 
-        void setBestIndividual(Individual* i);
+        std::list<Individual> bestParents;
+
+        std::vector<Individual> childCrossover;
+        std::vector<Individual> childMutation;
+
+        void setBestIndividual(Individual i);
 
 };
 
