@@ -29,6 +29,7 @@ class GaTTP
         void SetNPopInitial(int n);
         void SetPRate(float rate);
         void SetCRate(float rate);
+        void SetMRate(float rate);
         void SetStopN(int n);
         void SetStopTime(int minutes);
         void SetDistMatrix(std::string strMatrix);
@@ -49,6 +50,8 @@ class GaTTP
         int   nPopIn;
         float pRate;
         float cRate;
+        float mRate;
+        float eliteRate;
         int   stopQuant;
         int   stopTime;
 

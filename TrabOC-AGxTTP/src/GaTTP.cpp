@@ -3,7 +3,8 @@
 
 GaTTP::GaTTP()
 {
-    //ctor
+    cRate = 0;
+    pRate = 0;
 }
 
 GaTTP::~GaTTP()
@@ -22,14 +23,23 @@ void GaTTP::SetNPopInitial(int n){
     nPopIn = n;
 
 }
+
+
+void GaTTP::SetMRate(float rate){
+
+    mRate = rate;
+
+}
 void GaTTP::SetPRate(float rate){
 
     pRate = rate;
+    eliteRate  = 1.0f - (pRate+cRate);
 
 }
 void GaTTP::SetCRate(float rate){
 
     cRate = rate;
+    eliteRate  = 1.0f - (pRate+cRate);
 
 }
 void GaTTP::SetStopN(int n){

@@ -71,7 +71,9 @@ void Population::setBestIndividual(Individual* i){
 
 }
 
-void Population::SelectParents(){
+void Population::SelectParents(float eliteRate){
+
+    int parentsLen = ceil(length*eliteRate);
 
     for(int i=0;i<length;i++){
 
@@ -79,8 +81,20 @@ void Population::SelectParents(){
 
     }
 
-    bestParents.sort();                           // Ordena a lista de individuos da populacao
-    bestParents.reverse();                        // Reverte a ordenacao
-    bestParents.resize(length/3);                 // Corta os primeiros 1/3 dos melhores individuos
+    bestParents.sort();                                 // Ordena a lista de individuos da populacao
+    bestParents.reverse();                              // Reverte a ordenacao
+    bestParents.resize(parentsLen);                     // Corta os primeiros 1/3 dos melhores individuos
+
+}
+
+void Population::ParentsCrossover(float cRate){
+
+    int crossLen = ceil(length*cRate);
+
+}
+
+void Population::ParentsMutation(float pRate, float mRate){
+
+    int crossLen = ceil(length*pRate);
 
 }
