@@ -257,19 +257,19 @@ int Individual::ValidateMaxThreeGamesHome(){
             j1 = truePositions[jndex+1];
 		    k1 = truePositions[jndex+2];
 
-            if((k0 == k1+1) && (i0 == i1)) {
+            if((k0+1 == k1) && (i0 == i1)) {
                 for(int xndex=0; xndex < truePositionsLenght; xndex+=3){
                     i2 = truePositions[xndex];
                     j2 = truePositions[xndex+1];
             	    k2 = truePositions[xndex+2];
                     
-                    if((k1 == k2+1) && (i0 == i2)) {
+                    if((k1+1 == k2) && (i0 == i2)) {
                         for(int zndex=0; zndex < truePositionsLenght; zndex+=3){
                             i3 = truePositions[zndex];
                             j3 = truePositions[zndex+1];
                             k3 = truePositions[zndex+2];
         
-                            if((k2 == k3+1) && (i0 == i3)) {
+                            if((k2+1 == k3) && (i0 == i3)) {
         
                                 cout << "ValidateMaxThreeGamesHome: fault" << endl;
                 	            cout << "   Games " << i0 << "vs" << j0 << ", ";
@@ -287,6 +287,67 @@ int Individual::ValidateMaxThreeGamesHome(){
     }
     
 	cout << "ValidateMaxThreeGamesHome: ok" << endl;
+	return 0;
+}
+
+int Individual::ValidateMaxThreeGamesOut(){
+    GetTruePositionsInit();
+	int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
+    	
+    int i1 = 0;
+    int j1 = 0;
+    int k1 = 0;
+        
+    int i2 = 0;
+    int j2 = 0;
+    int k2 = 0;    
+        
+    int i3 = 0;
+    int j3 = 0;
+    int k3 = 0;    
+        
+    for(int index=0; index < truePositionsLenght; index+=3){
+        i0 = truePositions[index];
+    	j0 = truePositions[index+1];
+		k0 = truePositions[index+2];
+        
+        for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
+            i1 = truePositions[jndex];
+            j1 = truePositions[jndex+1];
+		    k1 = truePositions[jndex+2];
+
+            if((k0+1 == k1) && (j0 == j1)) {
+                for(int xndex=0; xndex < truePositionsLenght; xndex+=3){
+                    i2 = truePositions[xndex];
+                    j2 = truePositions[xndex+1];
+            	    k2 = truePositions[xndex+2];
+                    
+                    if((k1+1 == k2) && (j0 == j2)) {
+                        for(int zndex=0; zndex < truePositionsLenght; zndex+=3){
+                            i3 = truePositions[zndex];
+                            j3 = truePositions[zndex+1];
+                            k3 = truePositions[zndex+2];
+        
+                            if((k2+1 == k3) && (j0 == j3)) {
+        
+                                cout << "ValidateMaxThreeGamesOut: fault" << endl;
+                	            cout << "   Games " << i0 << "vs" << j0 << ", ";
+                                cout << i1 << "vs" << j1 << ", ";
+                                cout << i2 << "vs" << j2 << ", ";
+                                cout << i3 << "vs" << j3 << ", ";
+                                cout << " can't happen in sequence" << endl;
+                                return -1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+	cout << "ValidateMaxThreeGamesOut: ok" << endl;
 	return 0;
 }
 
