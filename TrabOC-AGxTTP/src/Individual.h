@@ -73,8 +73,9 @@ class Individual
         int         ValidatePlayEachOtherAgain();
         float       ObjectiveFunction();
         int         ValidateOneGamePerTeamPerRound();
-
-
+        float       ObjectiveFunctionFirstRound();
+        float       ObjectiveFunctionMidleRounds();
+        float       ObjectiveFunctionLastRound();
 };
 
 #endif // INDIVIDUAL_H
