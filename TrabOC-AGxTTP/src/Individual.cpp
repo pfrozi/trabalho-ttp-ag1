@@ -1,7 +1,7 @@
 #include "Individual.h"
 
 
-Individual::Individual()
+Individual::Individual() 
 {
     //ctor
 }
@@ -75,42 +75,53 @@ float Individual::CheckFitness() {
 bool initialized = false;
 
 int Individual::GetPosition(int i, int j, int k){
-	return i*rounds*rounds+j*rounds+k;
+    return i*nTeams*rounds+j*rounds+k;
 }
 
 int Individual::GetPositionValue(int i, int j, int k){
-	return chromosome[GetPosition(i,j,k)];
+    return chromosome[GetPosition(i,j,k)];
 }
 
 void Individual::SetPositionValue(int i, int j, int k, int value){
 	chromosome[GetPosition(i,j,k)] = value;
 }
 
-void Individual::GetTruePositions() {
+void Individual::GetTruePositionsInit() {
 
-	if(initialized) return;
+    if(initialized) return;
 	
-	int count = 0;
+    int count = 0;
 	for(int i=0; i < nTeams; i++){
 		for(int j=0; j < nTeams; j++){
 			for(int k=0; k < rounds; k++){
-				if(GetPositionValue(i,j,k) == true)
+                int value = GetPositionValue(i,j,k);
+                if(value == 1)
 				{
-					truePositions[count++] = i;
-					truePositions[count++] = j;
-					truePositions[count++] = k;
+					cout << "value 1 - i j k:" << i << j << k << endl;
+                    truePositions[count] = i;
+                    count += 1;
+					truePositions[count] = j;
+                    count += 1;
+					truePositions[count] = k;
+                    count += 1;
 				}
 			}
 		}
 	}
-	
-	truePositionsLenght = (sizeof(truePositions)/sizeof(*truePositions))
-	
+
+    truePositionsLenght = count;
+    
+    //for(int i=0; i < truePositionsLenght; i++){
+    //   cout << truePositions[i];
+    //}
+    //cout << endl;
+    //cout << "truePositionsLenght: " << truePositionsLenght << endl;
+
 	initialized = true;
 }
 
 int Individual::GetTruePositions(int i, int j, int k){
-	return i*9+j*3+k;
+    return i*9+j*3+k;
 }
 
 int Individual::GetTruePositionsValue(int i, int j, int k){
@@ -122,76 +133,64 @@ void Individual::SetTruePositionValue(int i, int j, int k, int value){
 }
 
 int Individual::ValidatePlayYourself(){
-	GetTruePositions();
-	int index = 0
+    GetTruePositionsInit();
+    int i = 0;
+    int j = 0;
+    int k = 0;
+	       
+    int index = 0;
 	while(index < truePositionsLenght) {
 		i = truePositions[index];
 		j = truePositions[index+1];
 		k = truePositions[index+2];
 
-		if(i = j) return -1;
+        if(i == j) {
+            cout << "ValidatePlayYourself: fault" << endl;
+			cout << "	i==j:" << i << j << endl;
+            return -1;
+        }
 		
-		index += 3
+		index += 3;
 	}
+	cout << "ValidatePlayYourself: ok" << endl;
 	return 0;
 }
 
 int Individual::ValidateMatchsPerRound(){
-	GetTruePositions();
-	int countk[rounds] = { 0 };
+    GetTruePositionsInit();
+	int i = 0;
+    int j = 0;
+    int k = 0;
+	int countk[] = { 0 };
 	
-	int index = 0
+	int index = 0;
 	while(index < truePositionsLenght) {
 		i = truePositions[index];
 		j = truePositions[index+1];
 		k = truePositions[index+2];
 
 		countk[k] += 1;
-		if(countk[k] > nTeams/2) return -1
+		if(countk[k] > nTeams/2) {
+            cout << "ValidateMatchsPerRound: fault" << endl;
+    		cout << "	Round " << k << " have more then " << (nTeams/2) << " games" << endl;
+            return -1;
+		}
 		
-		index += 3
+		index += 3;
 	}
-	
+	cout << "ValidateMatchsPerRound: ok" << endl;
 	return 0;
 }
 
 int Individual::ValidateGameOneTime(){
-	GetTruePositions();
-	for(int i=0; i < nTeams; i++){
-		for(int j=0; j < nTeams; j++){
-			if(i!=j)
-			{
-				int gamesIvsJ = 0;
-				for(int k = 0; k < rounds; k++){
-					if(GetPositionValue(i,j,k) = true) {
-						gamesIvsJ += 1;
-					}
-				}
-				if(gamesIvsJ != 1) {
-					return -1;
-				}
-			}
-		}
-	}
+	GetTruePositionsInit();
+
 	return 0;
 }
 
 int Individual::ValidateOneGame(){
-	GetTruePositions();
-	for(int i=0; i < nTeams; i++){
-		for(int j=0; j < nTeams; j++){
-			if(i!=j)
-			{
-				for(int k = 0; k < rounds; k++){
-					if(GetPositionValue(i,j,k) = true)
-					{
-						//0, 1, 0 = true
-						if(GetPositionValue(i,j,k))
-					}				
-				}
-			}
-		}
-	}
+	GetTruePositionsInit();
+
 	return 0;
 }
 
