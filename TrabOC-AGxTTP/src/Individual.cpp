@@ -351,3 +351,40 @@ int Individual::ValidateMaxThreeGamesOut(){
 	return 0;
 }
 
+int Individual::ValidatePlayEachOtherAgain(){
+    GetTruePositionsInit();
+	int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
+    	
+    int i1 = 0;
+    int j1 = 0;
+    int k1 = 0;
+        
+    for(int index=0; index < truePositionsLenght; index+=3){
+        i0 = truePositions[index];
+    	j0 = truePositions[index+1];
+		k0 = truePositions[index+2];
+        
+        for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
+            i1 = truePositions[jndex];
+            j1 = truePositions[jndex+1];
+		    k1 = truePositions[jndex+2];
+
+            if(k0+1 == k1){
+                if(i0 == j1 && i1 == j0)
+                {
+                    cout << "ValidatePlayEachOtherAgain: fault" << endl;
+                    cout << "   Games " << i0 << "vs" << j0 << " and ";
+                    cout << i1 << "vs" << j1 << ", ";
+                    cout << " can't happen in sequence" << endl;
+                    return -1;
+                }
+            }
+        }
+    }
+    
+	cout << "ValidatePlayEachOtherAgain: ok" << endl;
+	return 0;
+}
+
