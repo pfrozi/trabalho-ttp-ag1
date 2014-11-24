@@ -75,7 +75,9 @@ void Individual::SetDistMatrix(float** matrix){
 
 float Individual::CheckFitness() {
 
-    //return (float)GetRdmInt(0,10000)*1.0f/(float)GetRdmInt(0,1000);
+    //fitness = (float)GetRdmInt(0,10000)*1.0f/(float)GetRdmInt(0,1000);
+
+    //return fitness;
 
     float total = 0.0f;
 	float fo = ObjectiveFunction();
@@ -93,6 +95,8 @@ float Individual::CheckFitness() {
 	total += maxThreeGamesOut * 		10000000000000;
 	total += playEachOtherAgain * 		 1000000000000;
 	total += fo;
+
+    fitness = total;
 
 	return total;
 }

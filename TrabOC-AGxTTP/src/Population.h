@@ -50,8 +50,9 @@ class Population
 
         float** matrixDist;                          // Matriz de distancias entre as cidades dos times
 
-        std::list<Individual>   bestParents;
+        std::list<Individual>   lsBestParents;
 
+        std::vector<Individual> bestParents;
         std::vector<Individual> childCrossover;
         std::vector<Individual> childMutation;
 

@@ -95,23 +95,29 @@ void Population::SelectParents(float eliteRate){
 
     for(int i=0;i<length;i++){
 
-        bestParents.push_back(individuals[i]);
+        lsBestParents.push_back(individuals[i]);
 
     }
 
-    bestParents.sort();                                 // Ordena a lista de individuos da populacao
-    bestParents.reverse();                              // Reverte a ordenacao
-    bestParents.resize(parentsLen);                     // Corta os primeiros 1/3 dos melhores individuos
+    lsBestParents.sort();                                 // Ordena a lista de individuos da populacao
+    lsBestParents.reverse();                              // Reverte a ordenacao
+    //lsBestParents.resize(parentsLen);                   // Corta os primeiros 1/3 dos melhores individuos
+
+    std::list<Individual>::iterator it;
+    int k = 0;
+    for(it = lsBestParents.begin();k<parentsLen;++it){
+        Individual i = *it;
+        bestParents.push_back(i);
+        k++;
+    }
 
     printParents();
 }
 
 void Population::printParents() {
 
-    std::list<Individual>::iterator it;
-    for(it = bestParents.begin();it!=bestParents.end();++it){
-        Individual i = *it;
-        std::cout << i.ToString();
+    for(int i=0;i<bestParents.size();i++){
+        std::cout << bestParents[i].ToString();
     }
 
 }
@@ -120,8 +126,6 @@ void Population::ParentsCrossover(float cRate){
 
     int crossLen = ceil(length*cRate);
     int parent1,parent2;
-
-    std::list<Individual>::iterator it;
 
     for(int i=0;i<crossLen;i++){
         parent1 = GetRdmInt(0,bestParents.size()-1);
@@ -133,12 +137,9 @@ void Population::ParentsCrossover(float cRate){
             parent2 = GetRdmInt(parent1+1,bestParents.size()-1);
         }
 
-        it =  bestParents.begin();
-        std::advance(it,parent1);
-        Individual individual1 = *it;
-        it =  bestParents.begin();
-        std::advance(it,parent2);
-        Individual individual2 = *it;
+
+        Individual individual1 = bestParents[parent1];
+        Individual individual2 = bestParents[parent2];
 
         Individual newIndividual = individual1.Crossover(individual2);
         childCrossover.push_back(newIndividual);
@@ -151,15 +152,10 @@ void Population::ParentsMutation(float pRate, float mRate){
     int mutateLen = ceil(length*pRate);
     int parent1,parent2;
 
-    std::list<Individual>::iterator it;
-
     for(int i=0;i<mutateLen;i++){
         parent1 = GetRdmInt(0,bestParents.size()-1);
 
-        it =  bestParents.begin();
-        std::advance(it,parent1);
-        Individual individual1 = *it;
-
+        Individual individual1 = bestParents[parent1];
         Individual newIndividual = individual1.Mutate(mRate);
         childMutation.push_back(newIndividual);
     }
@@ -185,11 +181,9 @@ Population* Population::GenerateNewPopulation(){
     newPopulation->SetNTeams(nTeams);
     newPopulation->SetDistMatrix(matrixDist);
 
-
-    std::list<Individual>::iterator it;
     int k = 0;
-    for(it =  bestParents.begin();it!=bestParents.end();++it){
-        newPopulation->CopyIndividual(k,*it);
+    for(int l=0;l<bestParents.size();l++){
+        newPopulation->CopyIndividual(k,bestParents[l]);
         k++;
     }
     for(int i=0;i<childCrossover.size();i++){
