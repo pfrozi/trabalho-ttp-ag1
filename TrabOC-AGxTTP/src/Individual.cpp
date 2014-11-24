@@ -52,18 +52,59 @@ void Individual::SetNTeams(int n){
 
 void Individual::GenerateRdm(){
 
-    srand(time(NULL));
+//    for(int i=0; i<nTeams; i++){
+//
+//        for(int j=0; j<nTeams; j++){
+//
+//            if(i!=j){
+//
+//                int k = rand() % rounds;
+//                SetPositionValue(i,j,k, true);
+//            }
+//        }
+//
+//    }
 
-    for(int i=0; i<nTeams; i++){
-
-        for(int j=0; j<nTeams; j++){
-
-            if(i!=j){
-
-                int k = rand() % rounds;
-                SetPositionValue(i,j,k, true);
-            }
+    bool games[nTeams][nTeams];
+    for(int i=0;i<nTeams;i++){
+        for(int j=0;j<nTeams;j++){
+            games[i][j]=false;
         }
+    }
+
+    for(int k=0;k<rounds;k++){
+
+        int iPrev= -1;
+        int jPrev= -1;
+
+        for(int l=0;l<nTeams/2;l++){
+
+            int i = rand() % nTeams;
+            int j = rand() % nTeams;
+            if(i==j) j=(i+1) % nTeams;
+
+            if(games[i][j] || !(i!=iPrev && i!=jPrev && j!=iPrev && j!=jPrev)){
+                bool ok = false;
+                for(i=0;i<nTeams;i++){
+                    for(j=0;j<nTeams;j++){
+                        if(!games[i][j] && i!=j && i!=iPrev && i!=jPrev && j!=iPrev && j!=jPrev){
+                            ok = true;
+                            break;
+                        }
+                    }
+                    if(ok) break;
+                }
+            }
+
+            games[i][j] = true;
+            SetPositionValue(i,j,k,true);
+
+            iPrev = i;
+            jPrev = j;
+        }
+
+
+
 
     }
 }
@@ -88,12 +129,12 @@ float Individual::CheckFitness() {
 	int maxThreeGamesOut = ValidateMaxThreeGamesOut();
 	int playEachOtherAgain = ValidatePlayEachOtherAgain();
 
-	total += playYourself * 		100000000000000000;
-	total += matchsPerRound * 		 10000000000000000;
-	total += oneGamePerTeamPerRound * 1000000000000000;
-	total += maxThreeGamesHome * 	   100000000000000;
-	total += maxThreeGamesOut * 		10000000000000;
-	total += playEachOtherAgain * 		 1000000000000;
+	total += playYourself               * pow(10.0,17.0);
+	total += matchsPerRound             * pow(10.0,16.0);
+	total += maxThreeGamesHome          * pow(10.0,15.0);
+	total += maxThreeGamesOut           * pow(10.0,14.0);
+	total += playEachOtherAgain         * pow(10.0,13.0);
+	total += oneGamePerTeamPerRound     * pow(10.0,12.0);
 	total += fo;
 
     fitness = total;
@@ -109,7 +150,7 @@ float Individual::ObjectiveFunctionFirstRound() {
     int k0 = 0;
 
     int firstRoundIndex = 0;
-    int firstRound[120];
+    int firstRound[300];
     int firstRoundLength = 0;
     int x = 0;
     for (x = 0; x < (nTeams/2) * 3; x++){
@@ -214,7 +255,7 @@ float Individual::ObjectiveFunctionLastRound() {
     int k0 = 0;
 
     int lastRoundIndex = 0;
-    int lastRound[120];
+    int lastRound[300];
     int lastRoundLength = 0;
     int x = 0;
     for (x = 0; x < (nTeams/2) * 3; x++){
@@ -265,10 +306,10 @@ float Individual::ObjectiveFunction() {
 
     total += firstRound + midleRounds + lastRound;
 
-    std::cout << "firstRound: " << firstRound << std::endl;
-    std::cout << "midleRounds: " << midleRounds << std::endl;
-    std::cout << "lastRound: " << lastRound << std::endl;
-    std::cout << "total: " << total << std::endl;
+//    std::cout << "firstRound: " << firstRound << std::endl;
+//    std::cout << "midleRounds: " << midleRounds << std::endl;
+//    std::cout << "lastRound: " << lastRound << std::endl;
+//    std::cout << "total: " << total << std::endl;
 
     return total;
 }
@@ -314,13 +355,68 @@ Individual Individual::Mutate(float mRate){
     newIndividual.SetNTeams(nTeams);
     newIndividual.SetDistMatrix(matrixDist);
 
-    for(int i=0;i<length;i++){
+    for(int a=0;a<nTeams*nTeams*rounds;a++){
+        newIndividual.SetAllele(a,chromosome[a]);
+    }
+
+
+//    for(int i=0;i<length;i++){
+//
+//        if(GetRdmBool(mRate)){
+//            newIndividual.SetAllele(i,!chromosome[i]);
+//
+//
+//        }
+//        else{
+//            newIndividual.SetAllele(i,chromosome[i]);
+//        }
+//    }
+
+    std::vector<int> in;
+    std::vector<int> out;
+
+    for(int k=0;k<rounds;k++){
 
         if(GetRdmBool(mRate)){
-            newIndividual.SetAllele(i,!chromosome[i]);
-        }
-        else{
-            newIndividual.SetAllele(i,chromosome[i]);
+
+            for(int i=0;i<nTeams;i++){
+                for(int j=0;j<nTeams;j++){
+
+                    if(newIndividual.GetPositionValue(i, j, k)){
+                        in.push_back(i);
+                        out.push_back(j);
+
+                        newIndividual.SetPositionValue(i,j,k,false);
+                    }
+                }
+            }
+
+            while(in.size()>0 && out.size()>0){
+
+                int r1 = rand() % in.size();
+                int r2 = rand() % out.size();
+
+                int iNew,jNew;
+
+                if(rand()%2==0){
+                    iNew = in.at(r1);
+                    jNew = out.at(r2);
+
+                    in.erase(in.begin()+r1);
+                    out.erase(out.begin()+r2);
+                }
+                else {
+                    iNew = out.at(r1);
+                    jNew = in.at(r2);
+
+                    out.erase(out.begin()+r1);
+                    in.erase(in.begin()+r2);
+                }
+
+                newIndividual.SetPositionValue(iNew,jNew,k,true);
+            }
+
+
         }
     }
 
@@ -341,7 +437,28 @@ bool Individual::GetAllele(int index){
 
 void Individual::GetTruePositionsInit() {
 
-    if(initialized) return;
+
+//    if(initialized) return;
+//
+//    int count = 0;
+//
+//	for(int i=0; i < nTeams; i++){
+//		for(int j=0; j < nTeams; j++){
+//			for(int k=0; k < rounds; k++){
+//                int value = GetPositionValue(i,j,k);
+//                if(value == 1)
+//				{
+//					count += 3;
+//				}
+//			}
+//		}
+//	}
+//
+//    truePositionsLenght = count;
+//
+//    truePositions = new int[truePositionsLenght];
+
+    truePositions = new int[300];
 
     int count = 0;
 
@@ -351,7 +468,7 @@ void Individual::GetTruePositionsInit() {
                 int value = GetPositionValue(i,j,k);
                 if(value == 1)
 				{
-					std::cout << "value 1 - i j k:" << i << j << k << std::endl;
+//					std::cout << "value 1 - i j k:" << i << j << k << std::endl;
                     truePositions[count] = i;
                     count += 1;
 					truePositions[count] = j;
@@ -363,7 +480,7 @@ void Individual::GetTruePositionsInit() {
 		}
 	}
 
-    truePositionsLenght = count;
+	truePositionsLenght = count;
 
     //for(int i=0; i < truePositionsLenght; i++){
     //   std::cout << truePositions[i];
@@ -400,14 +517,14 @@ int Individual::ValidatePlayYourself(){
 		k = truePositions[index+2];
 
         if(i == j) {
-            std::cout << "ValidatePlayYourself: fault" << std::endl;
-			std::cout << "	i==j:" << i << j << std::endl;
+//            std::cout << "ValidatePlayYourself: fault" << std::endl;
+//			std::cout << "	i==j:" << i << j << std::endl;
             return 1;
         }
 
 		index += 3;
 	}
-	std::cout << "ValidatePlayYourself: ok" << std::endl;
+//	std::cout << "ValidatePlayYourself: ok" << std::endl;
 	return 0;
 }
 
@@ -435,14 +552,24 @@ int Individual::ValidateMatchsPerRound(){
         //std::cout << "countk[k]" << countk[0] << " " << countk[1] << " " << countk[2] << " " << countk[3] << " " << countk[4] << " " << countk[5] << " " << std::endl;
 
         if(countk[k] > nTeams/2) {
-            std::cout << "ValidateMatchsPerRound: fault" << std::endl;
-    		std::cout << "   Round " << k << " have more then " << (nTeams/2) << " games" << std::endl;
+//            std::cout << "ValidateMatchsPerRound: fault" << std::endl;
+//    		  std::cout << "   Round " << k << " have more then " << (nTeams/2) << " games" << std::endl;
             return 1;
 		}
 
 		index += 3;
 	}
-	std::cout << "ValidateMatchsPerRound: ok" << std::endl;
+
+	for (int x = 0; x < rounds; x++){
+        if(countk[x] != nTeams/2)
+        {
+//            std::cout << "ValidateMatchsPerRound: fault" << std::endl;
+//            std::cout << " Round " << x << " don't have " << (nTeams/2) << " games" << std::endl;
+            return 1;
+        }
+    }
+
+//	std::cout << "ValidateMatchsPerRound: ok" << std::endl;
 	return 0;
 }
 
@@ -470,8 +597,8 @@ int Individual::ValidateOneGamePerTeamPerRound(){
 
                 if(k0 == k1) {
                     if((i0 == i1) || (j0 == j1) || (i0 == j1) || (j0 == i1)) {
-                        std::cout << "ValidateOneGamePerTeamPerRound: fault" << std::endl;
-            	        std::cout << "   Game " << i0 << "vs" << j0 << " and game " << i1 << "vs" << j1 << " can't happen in same round" << std::endl;
+//                        std::cout << "ValidateOneGamePerTeamPerRound: fault" << std::endl;
+//            	          std::cout << "   Game " << i0 << "vs" << j0 << " and game " << i1 << "vs" << j1 << " can't happen in same round" << std::endl;
                         return 1;
                     }
                 }
@@ -479,7 +606,7 @@ int Individual::ValidateOneGamePerTeamPerRound(){
         }
     }
 
-	std::cout << "ValidateGameOneTime: ok" << std::endl;
+//	std::cout << "ValidateGameOneTime: ok" << std::endl;
 
 	return 0;
 }
@@ -526,12 +653,12 @@ int Individual::ValidateMaxThreeGamesHome(){
 
                             if((k2+1 == k3) && (i0 == i3)) {
 
-                                std::cout << "ValidateMaxThreeGamesHome: fault" << std::endl;
-                	            std::cout << "   Games " << i0 << "vs" << j0 << ", ";
-                                std::cout << i1 << "vs" << j1 << ", ";
-                                std::cout << i2 << "vs" << j2 << ", ";
-                                std::cout << i3 << "vs" << j3 << ", ";
-                                std::cout << " can't happen in sequence" << std::endl;
+//                                std::cout << "ValidateMaxThreeGamesHome: fault" << std::endl;
+//                	              std::cout << "   Games " << i0 << "vs" << j0 << ", ";
+//                                std::cout << i1 << "vs" << j1 << ", ";
+//                                std::cout << i2 << "vs" << j2 << ", ";
+//                                std::cout << i3 << "vs" << j3 << ", ";
+//                                std::cout << " can't happen in sequence" << std::endl;
                                 return 1;
                             }
                         }
@@ -541,7 +668,7 @@ int Individual::ValidateMaxThreeGamesHome(){
         }
     }
 
-	std::cout << "ValidateMaxThreeGamesHome: ok" << std::endl;
+//	std::cout << "ValidateMaxThreeGamesHome: ok" << std::endl;
 	return 0;
 }
 
@@ -587,12 +714,12 @@ int Individual::ValidateMaxThreeGamesOut(){
 
                             if((k2+1 == k3) && (j0 == j3)) {
 
-                                std::cout << "ValidateMaxThreeGamesOut: fault" << std::endl;
-                	            std::cout << "   Games " << i0 << "vs" << j0 << ", ";
-                                std::cout << i1 << "vs" << j1 << ", ";
-                                std::cout << i2 << "vs" << j2 << ", ";
-                                std::cout << i3 << "vs" << j3 << ", ";
-                                std::cout << " can't happen in sequence" << std::endl;
+//                                std::cout << "ValidateMaxThreeGamesOut: fault" << std::endl;
+//                	            std::cout << "   Games " << i0 << "vs" << j0 << ", ";
+//                                std::cout << i1 << "vs" << j1 << ", ";
+//                                std::cout << i2 << "vs" << j2 << ", ";
+//                                std::cout << i3 << "vs" << j3 << ", ";
+//                                std::cout << " can't happen in sequence" << std::endl;
                                 return 1;
                             }
                         }
@@ -602,7 +729,7 @@ int Individual::ValidateMaxThreeGamesOut(){
         }
     }
 
-	std::cout << "ValidateMaxThreeGamesOut: ok" << std::endl;
+//	std::cout << "ValidateMaxThreeGamesOut: ok" << std::endl;
 	return 0;
 }
 
@@ -627,26 +754,27 @@ int Individual::ValidatePlayEachOtherAgain(){
 		    k1 = truePositions[jndex+2];
 
             if(k0+1 == k1){
-                if(i0 == j1 && i1 == j0)
+                if(i0 == j1 && i1 == j0 || i0 == i1 && j0 == j1)
                 {
-                    std::cout << "ValidatePlayEachOtherAgain: fault" << std::endl;
-                    std::cout << "   Games " << i0 << "vs" << j0 << " and ";
-                    std::cout << i1 << "vs" << j1 << ", ";
-                    std::cout << " can't happen in sequence" << std::endl;
+//                    std::cout << "ValidatePlayEachOtherAgain: fault" << std::endl;
+//                    std::cout << "   Games " << i0 << "vs" << j0 << " and ";
+//                    std::cout << i1 << "vs" << j1 << ", ";
+//                    std::cout << " can't happen in sequence" << std::endl;
                     return 1;
                 }
             }
         }
     }
 
-	std::cout << "ValidatePlayEachOtherAgain: ok" << std::endl;
+	// std::cout << "ValidatePlayEachOtherAgain: ok" << std::endl;
 	return 0;
 }
 
 std::string Individual::ToString(){
 
     std::stringstream out;
-    out << "--------------------------------/nCromossomo: ";
+    out << "--------------------------------" << std::endl;
+    out << "Cromossomo: ";
 
     for(int i=0;i<length;i++){
 
@@ -659,22 +787,22 @@ std::string Individual::ToString(){
 
     }
 
-    out << "\n";
+    out << std::endl;
     out << "Fitness: ";
     out << fitness;
-    out << "\n";
-    out << "--- Representacao da Solucao ---\n";
+    out << std::endl;
+    out << "--- Representacao da Solucao ---" << std::endl;
 
     for(int k=0;k<rounds;k++){
 
-        out << "Rodada " << (k+1) << ":\n";
+        out << "Rodada " << (k+1) << ":" << std::endl;
 
         for(int i=0;i<nTeams;i++){
             for(int j=0;j<nTeams;j++){
 
                 if((bool)GetPositionValue(i,j,k)){
 
-                    out << "Time " << (i+1) << " X Time " << (j+1) << "\n";
+                    out << "Time " << (i+1) << " X Time " << (j+1) << std::endl;
 
                 }
 
@@ -682,7 +810,52 @@ std::string Individual::ToString(){
         }
     }
 
-    out << "--------------------------------/n";
+    out << "--------------------------------"<< std::endl;
+    return out.str();
+
+}
+
+std::string Individual::ToString(std::vector<std::string> teams){
+
+    std::stringstream out;
+    out << "--------------------------------" << std::endl;
+    out << "Cromossomo: ";
+
+    for(int i=0;i<length;i++){
+
+        if(chromosome[i]){
+            out << "1";
+        }
+        else {
+            out << "0";
+        }
+
+    }
+
+    out << std::endl;
+    out << "Fitness: ";
+    out << fitness;
+    out << std::endl;
+    out << "--- Representacao da Solucao ---" << std::endl;
+
+    for(int k=0;k<rounds;k++){
+
+        out << "Rodada " << (k+1) << ":" << std::endl;
+
+        for(int i=0;i<nTeams;i++){
+            for(int j=0;j<nTeams;j++){
+
+                if((bool)GetPositionValue(i,j,k)){
+
+                    out << teams.at(i) << " X " << teams.at(j) << std::endl;
+
+                }
+
+            }
+        }
+    }
+
+    out << "--------------------------------"<< std::endl;
     return out.str();
 
 }

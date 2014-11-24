@@ -199,7 +199,6 @@ int main(int argc, char* argv[])
 
         cout << "\nWelcome to Solver of TTP with AG!\n" << endl;
 
-
         setGa();
 
         ga.Solve();
@@ -223,5 +222,10 @@ void setGa(){
     ga.SetStopN(stopQuant);
     ga.SetStopTime(stopTime);
     ga.SetDistMatrix(strDistMatrix);
+
+    ga.SetOutputFile(outputFile);
+
+
+    srand(MY_SEED);
 
 }

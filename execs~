@@ -1,0 +1,13 @@
+./traboc_ttpga -o NL4.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 3 -s 5 -M ATL,NYM,PHI,MON/0,745,665,929/745,0,80,337/665,80,0,380/929,337,380,0
+
+./traboc_ttpga -o Super4_1.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 3 -s 5 -M TEAM_A,TEAM_B,TEAM_C,TEAM_D/0,7431,6628,226/7431,0,1429,7586/6628,1429,0,6712/226,7586,6712,0
+
+./traboc_ttpga -o Super4_2.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 15 -s 5 -M TEAM_A,TEAM_B,TEAM_C,TEAM_D/0,7431,6628,226/7431,0,1429,7586/6628,1429,0,6712/226,7586,6712,0
+
+./traboc_ttpga -o Super4_3.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 50 -s 5 -M TEAM_A,TEAM_B,TEAM_C,TEAM_D/0,7431,6628,226/7431,0,1429,7586/6628,1429,0,6712/226,7586,6712,0
+
+./traboc_ttpga -o Super4_4.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 1000 -s 5 -M TEAM_A,TEAM_B,TEAM_C,TEAM_D/0,7431,6628,226/7431,0,1429,7586/6628,1429,0,6712/226,7586,6712,0
+
+./traboc_ttpga -o Super4_5.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 10000 -s 5 -M TEAM_A,TEAM_B,TEAM_C,TEAM_D/0,7431,6628,226/7431,0,1429,7586/6628,1429,0,6712/226,7586,6712,0
+
+

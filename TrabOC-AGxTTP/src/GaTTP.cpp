@@ -10,17 +10,27 @@ GaTTP::GaTTP()
     genNoImprov = 0;
 
     current = new Population;
-    time(&startTime);
+    startClock = clock();
 }
 
 GaTTP::~GaTTP()
 {
-    delete this;
+
 }
 
 double GaTTP::TimeElapsedInMinutes(){
 
-    return difftime(endTime, startTime)/60.0;
+    return (((float)endClock-startClock)/CLOCKS_PER_SEC)/60.0;
+
+}
+std::string GaTTP::StrTimeElapsed(){
+
+    std::stringstream out;
+
+    out << ((float)endClock-startClock)/CLOCKS_PER_SEC;
+    out << " segundos";
+
+    return out.str();
 
 }
 
@@ -81,17 +91,21 @@ void GaTTP::GenerateInitial(int nPop){
 
 void GaTTP::SetDistMatrix(std::string strMatrix){
 
-    matrixDist = readMatrix(strMatrix, teams, matrixDist);
+    matrixDist = readMatrix(strMatrix, &teams, matrixDist);
 
 }
 
 void GaTTP::nextGeneration(){
 
-    Population* newPop = current->GenerateNewPopulation();
+    Population* nextPop = new Population;
+
+    current->GenerateNewPopulation(nextPop);
 
     generation++;
 
-    if(newPop->GetBestFitness()<current->GetBestFitness()) {
+    nextPop->CalcFitness();
+
+    if(nextPop->GetBestFitness()>=current->GetBestFitness()) {
         genNoImprov++;
     }
     else{
@@ -99,11 +113,11 @@ void GaTTP::nextGeneration(){
     }
 
     delete current;
-    current = newPop;
+    current = nextPop;
 
     //bestIndividual = newPop->GetBestIndividual();
 
-    time(&endTime);
+    endClock = clock();
 
 }
 
@@ -111,6 +125,7 @@ void GaTTP::Solve() {
 
     // Gera uma populacao randomica inicial
     GenerateInitial();
+    current->CalcFitness();
 
     do{
 
@@ -125,6 +140,23 @@ void GaTTP::Solve() {
 
     }while(!verifyStoppage()); // verifica condicao de parada
 
+    std::cout << "Tempo Total: ";
+    std::cout << StrTimeElapsed() << std::endl;
+    std::cout << "Total de geracoes: ";
+    std::cout << generation << std::endl;
+    std::cout << "**** Solucao **** ";
+    std::cout << current->GetBestIndividual().ToString(teams);
+
+    std::ofstream out(outputFile.c_str(), std::ofstream::out);
+    out << "Tempo Total: ";
+    out << StrTimeElapsed() << std::endl;
+    out << "Total de geracoes: ";
+    out << generation << std::endl;
+    out << "**** Solucao **** ";
+    out << current->GetBestIndividual().ToString(teams);
+    out.close();
+
+
 }
 
 bool GaTTP::verifyStoppage(){
@@ -137,6 +169,11 @@ bool GaTTP::verifyStoppage(){
 
 }
 
+void GaTTP::SetOutputFile(std::string file){
+
+    outputFile = file;
+
+}
 
 std::string GaTTP::GetCurrent(){
 

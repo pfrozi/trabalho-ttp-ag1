@@ -14,7 +14,7 @@ std::vector<std::string> split(std::string str,std::string sep){
     return arr;
 }
 
-float** readMatrix(std::string strMatrix, std::vector<std::string> header, float** matrix){
+float** readMatrix(std::string strMatrix, std::vector<std::string> *header, float** matrix){
 
     bool first_line = true;
 
@@ -30,14 +30,14 @@ float** readMatrix(std::string strMatrix, std::vector<std::string> header, float
 
             if(first_line){
 
-                header.push_back(fields.at(j));
+                header->push_back(fields.at(j));
 
             }
             else{
 
                 if(j==0){
 
-                    matrix[i-1] = new float[header.size()];
+                    matrix[i-1] = new float[header->size()];
                 }
                 matrix[i-1][j] = atof(fields.at(j).c_str());
 
@@ -47,7 +47,7 @@ float** readMatrix(std::string strMatrix, std::vector<std::string> header, float
 
         if(first_line){
 
-            matrix = new float*[header.size()];
+            matrix = new float*[header->size()];
             first_line = false;
         }
     }
@@ -57,13 +57,11 @@ float** readMatrix(std::string strMatrix, std::vector<std::string> header, float
 
 bool GetRdmBool(float p)
 {
-    srand(time(NULL));
     return (rand() / (double)RAND_MAX) < p;
 }
 
 int  GetRdmInt(int begin, int end){
 
-    srand(time(NULL));
     return(begin + (rand() % (end - begin)));
 
 }

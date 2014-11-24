@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <math.h>
 #include <stdlib.h>     /* srand, rand */
 #include <time.h>       /* time */
 #include <sstream>
@@ -32,6 +33,7 @@ class Individual
         void        SetAllele(int index, bool value);
 
         std::string ToString();
+        std::string ToString(std::vector<std::string> teams);
         float       GetFitness();
         float       CheckFitness();     // Verifica / Calcula o valor da funcao fitness;
 

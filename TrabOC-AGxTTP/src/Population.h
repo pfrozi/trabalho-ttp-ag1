@@ -25,7 +25,7 @@ class Population
 
         void SetDistMatrix(float** matrix);
 
-        Population* GenerateNewPopulation();
+        void GenerateNewPopulation(Population* newPopulation);
 
         float GetBestFitness();
         Individual GetBestIndividual();
@@ -60,6 +60,8 @@ class Population
         bool verifyStoppage();
 
         void printParents();
+        void printCrossOver();
+        void printMutation();
 
 };
 

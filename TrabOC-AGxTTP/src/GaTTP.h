@@ -1,3 +1,5 @@
+#include <fstream>
+#include <string>
 #include <iostream>
 #include <list>
 #include <time.h>
@@ -26,6 +28,7 @@ class GaTTP
         time_t GetEndTime();
 
         double TimeElapsedInMinutes();
+        std::string StrTimeElapsed();
 
         void SetNTeams(int n);
         void SetNPopInitial(int n);
@@ -35,7 +38,7 @@ class GaTTP
         void SetStopN(int n);
         void SetStopTime(int minutes);
         void SetDistMatrix(std::string strMatrix);
-
+        void SetOutputFile(std::string file);
 
     protected:
 
@@ -57,9 +60,12 @@ class GaTTP
         int   stopQuant;
         int   stopTime;
 
-        time_t startTime, endTime;
+        std::string outputFile;
+
+        time_t startClock, endClock;
 
         Population* current;
+
         long        generation;
         int         genNoImprov;
 

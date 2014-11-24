@@ -33,7 +33,7 @@ void Population::GenerateRandom(int length){
 
         individuals[l].GenerateRdm();
 
-        std::cout << individuals[l].ToString();
+//        std::cout << individuals[l].ToString();
 
 //        Individual individual;
 //
@@ -91,8 +91,6 @@ void Population::SelectParents(float eliteRate){
 
     int parentsLen = ceil(length*eliteRate);
 
-    CalcFitness();
-
     for(int i=0;i<length;i++){
 
         lsBestParents.push_back(individuals[i]);
@@ -100,7 +98,7 @@ void Population::SelectParents(float eliteRate){
     }
 
     lsBestParents.sort();                                 // Ordena a lista de individuos da populacao
-    lsBestParents.reverse();                              // Reverte a ordenacao
+    //lsBestParents.reverse();                            // Reverte a ordenacao
     //lsBestParents.resize(parentsLen);                   // Corta os primeiros 1/3 dos melhores individuos
 
     std::list<Individual>::iterator it;
@@ -111,13 +109,33 @@ void Population::SelectParents(float eliteRate){
         k++;
     }
 
-    printParents();
+//    printParents();
 }
 
 void Population::printParents() {
 
+    std::cout << "######### Best Parents #########" << std::endl;
+
     for(int i=0;i<bestParents.size();i++){
         std::cout << bestParents[i].ToString();
+    }
+
+}
+void Population::printCrossOver() {
+
+    std::cout << "######### CrossOver #########" << std::endl;
+
+    for(int i=0;i<childCrossover.size();i++){
+        std::cout << childCrossover[i].ToString();
+    }
+
+}
+void Population::printMutation() {
+
+    std::cout << "######### Mutation #########" << std::endl;
+
+    for(int i=0;i<childMutation.size();i++){
+        std::cout << childMutation[i].ToString();
     }
 
 }
@@ -145,6 +163,8 @@ void Population::ParentsCrossover(float cRate){
         childCrossover.push_back(newIndividual);
     }
 
+//    printCrossOver();
+
 }
 
 void Population::ParentsMutation(float pRate, float mRate){
@@ -159,6 +179,8 @@ void Population::ParentsMutation(float pRate, float mRate){
         Individual newIndividual = individual1.Mutate(mRate);
         childMutation.push_back(newIndividual);
     }
+
+//    printMutation();
 }
 
 void Population::SetDistMatrix(float** matrix){
@@ -171,9 +193,7 @@ float Population::GetBestFitness()
     return bestFitness;
 }
 
-Population* Population::GenerateNewPopulation(){
-
-    Population* newPopulation = new Population;
+void Population::GenerateNewPopulation(Population* newPopulation){
 
     int newLength = bestParents.size()+childCrossover.size()+childMutation.size();
 
@@ -195,7 +215,6 @@ Population* Population::GenerateNewPopulation(){
         k++;
     }
 
-    return newPopulation;
 
 
 }
@@ -207,7 +226,7 @@ void Population::CopyIndividual(int index, Individual individual){
     individuals[index].SetNTeams(nTeams);
     individuals[index].SetDistMatrix(matrixDist);
 
-    for(int i=0;i<length;i++){
+    for(int i=0;i<nTeams*nTeams*rounds;i++){
         individuals[index].SetAllele(i,individual.GetAllele(i));
     }
 }
