@@ -1,8 +1,8 @@
-Tempo Total: 0.003139 segundos
-Total de geracoes: 11
+Tempo Total: 0.002785 segundos
+Total de geracoes: 4
 **** Solucao **** --------------------------------
-Cromossomo: 000000010000100000001000000010000000000001000100000100001000000000010000000001100000000010000000
-Fitness: 8276
+Cromossomo: 000000010000100000001000000010000000001000000100000100000001000000010000000001100000000010000000
+Fitness: 8559
 --- Representacao da Solucao ---
 Rodada 1:
 ATL X PHI
@@ -12,7 +12,7 @@ ATL X NYM
 PHI X MON
 Rodada 3:
 ATL X MON
-PHI X NYM
+NYM X PHI
 Rodada 4:
 NYM X MON
 PHI X ATL
@@ -20,6 +20,6 @@ Rodada 5:
 NYM X ATL
 MON X PHI
 Rodada 6:
-NYM X PHI
+PHI X NYM
 MON X ATL
 --------------------------------

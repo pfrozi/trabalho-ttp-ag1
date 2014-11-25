@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="-o test.sol -t 4 -T 12 -p 0.3 -c 0.3 -m 0.10 -d 3 -s 5 -M ATL,NYM,PHI,MON/0,745,665,929/745,0,80,337/665,80,0,380/929,337,380,0" />
+				<Option parameters="-o NL6_1.sol -t 6 -T 35 -p 0.3 -c 0.3 -m 0.10 -d 1000 -s 5 -M ATL,NYM,PHI,MON,FLA,PIT/0,745,665,929,605,521/745,0,80,337,1090,315/665,80,0,380,1020,257/929,337,380,0,1380,408/605,1090,1020,1380,0,1010/521,315,257,408,1010,0" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>

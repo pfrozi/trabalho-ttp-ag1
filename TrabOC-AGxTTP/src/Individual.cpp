@@ -72,22 +72,27 @@ void Individual::GenerateRdm(){
         }
     }
 
+    int nMatch = nTeams/2;
+
+    int iPrev[nMatch];
+    int jPrev[nMatch];
+
     for(int k=0;k<rounds;k++){
 
-        int iPrev= -1;
-        int jPrev= -1;
+        for(int m=0;m<nMatch;m++) iPrev[m]=-1;
+        for(int m=0;m<nMatch;m++) jPrev[m]=-1;
 
-        for(int l=0;l<nTeams/2;l++){
+        for(int l=0;l<nMatch;l++){
 
             int i = rand() % nTeams;
             int j = rand() % nTeams;
             if(i==j) j=(i+1) % nTeams;
 
-            if(games[i][j] || !(i!=iPrev && i!=jPrev && j!=iPrev && j!=jPrev)){
+            if(games[i][j] || ExistItem(nMatch,iPrev,i) || ExistItem(nMatch,iPrev,j) || ExistItem(nMatch,jPrev,i) || ExistItem(nMatch,jPrev,j)){
                 bool ok = false;
                 for(i=0;i<nTeams;i++){
                     for(j=0;j<nTeams;j++){
-                        if(!games[i][j] && i!=j && i!=iPrev && i!=jPrev && j!=iPrev && j!=jPrev){
+                        if(i!=j && !(games[i][j] || ExistItem(nMatch,iPrev,i) || ExistItem(nMatch,iPrev,j) || ExistItem(nMatch,jPrev,i) || ExistItem(nMatch,jPrev,j))){
                             ok = true;
                             break;
                         }
@@ -99,14 +104,14 @@ void Individual::GenerateRdm(){
             games[i][j] = true;
             SetPositionValue(i,j,k,true);
 
-            iPrev = i;
-            jPrev = j;
+            iPrev[l]=i;
+            jPrev[l]=j;
         }
 
 
-
-
     }
+
+    //std::cout << ToString();
 }
 
 void Individual::SetDistMatrix(float** matrix){
@@ -128,13 +133,15 @@ float Individual::CheckFitness() {
 	int maxThreeGamesHome = ValidateMaxThreeGamesHome();
 	int maxThreeGamesOut = ValidateMaxThreeGamesOut();
 	int playEachOtherAgain = ValidatePlayEachOtherAgain();
+	int validateUniqueGame = ValidateUniqueGame();
 
 	total += playYourself               * pow(10.0,17.0);
 	total += matchsPerRound             * pow(10.0,16.0);
-	total += maxThreeGamesHome          * pow(10.0,15.0);
-	total += maxThreeGamesOut           * pow(10.0,14.0);
-	total += playEachOtherAgain         * pow(10.0,13.0);
-	total += oneGamePerTeamPerRound     * pow(10.0,12.0);
+	total += validateUniqueGame         * pow(10.0,15.0);
+	total += maxThreeGamesHome          * pow(10.0,14.0);
+	total += maxThreeGamesOut           * pow(10.0,13.0);
+	total += playEachOtherAgain         * pow(10.0,12.0);
+	total += oneGamePerTeamPerRound     * pow(10.0,11.0);
 	total += fo;
 
     fitness = total;
@@ -358,20 +365,90 @@ Individual Individual::Mutate(float mRate){
     for(int a=0;a<nTeams*nTeams*rounds;a++){
         newIndividual.SetAllele(a,chromosome[a]);
     }
+//    std::cout << newIndividual.ToString();
+    //if(GetRdmBool(mRate)&&fitness>pow(10.0,15.0)-FIT_ERR && fitness<pow(10.0,15.0)+FIT_ERR){
+
+       //MutationRestrict(&newIndividual,mRate);
+
+    //}else{
+
+        MutationInRound(&newIndividual,mRate);
+    //}
+
+//    std::cout << newIndividual.ToString();
 
 
-//    for(int i=0;i<length;i++){
-//
-//        if(GetRdmBool(mRate)){
-//            newIndividual.SetAllele(i,!chromosome[i]);
-//
-//
-//        }
-//        else{
-//            newIndividual.SetAllele(i,chromosome[i]);
-//        }
-//    }
+    return newIndividual;
 
+}
+
+void Individual::MutationRestrict(Individual* newIndividual, float mRate){
+
+
+        int matches[nTeams][nTeams];
+        int ks[nTeams][nTeams][rounds];
+
+        for(int i=0;i<nTeams;i++){
+            for(int j=0;j<nTeams;j++){
+                matches[i][j] = 0;
+            }
+        }
+
+        for(int k=0;k<rounds;k++){
+            for(int i=0;i<nTeams;i++){
+                for(int j=0;j<nTeams;j++){
+                    if(newIndividual->GetPositionValue(i,j,k)) {
+                        ks[i][j][matches[i][j]] = k;
+                        matches[i][j]++;
+
+                    }
+                }
+            }
+        }
+        bool keep;
+        do{
+            int k_newgame = -1;
+            keep = false;
+            for(int i=0;i<nTeams;i++){
+                for(int j=0;j<nTeams;j++){
+                    if(k_newgame<0 && matches[i][j]>1) {
+                        k_newgame = ks[i][j][matches[i][j]-1];
+                        newIndividual->SetPositionValue(i,j,k_newgame,false);
+                        matches[i][j]--;
+                        keep = true;
+                        break;
+                    }
+                }
+                if(k_newgame>=0) break;
+            }
+            if(!keep)break;
+            for(int i=0;i<nTeams;i++){
+                bool stop=false;
+
+                for(int j=0;j<nTeams;j++){
+
+                    bool ok = true;
+                    if(i!=j && matches[i][j]<1){
+
+                        for(int l=0;l<nTeams;l++) ok&=!newIndividual->GetPositionValue(l,i,k_newgame) && !newIndividual->GetPositionValue(i,l,k_newgame);
+                        if(!ok) continue;
+                        for(int l=0;l<nTeams;l++) ok&=!newIndividual->GetPositionValue(l,j,k_newgame) && !newIndividual->GetPositionValue(j,l,k_newgame);
+                        if(!ok) continue;
+                        newIndividual->SetPositionValue(i,j,k_newgame,true);
+                        stop = true;
+                        break;
+                    }
+                }
+                if(stop) break;
+            }
+
+        }while(keep);
+
+
+}
+
+void Individual::MutationInRound(Individual* newIndividual,float mRate)
+{
     std::vector<int> in;
     std::vector<int> out;
 
@@ -382,11 +459,11 @@ Individual Individual::Mutate(float mRate){
             for(int i=0;i<nTeams;i++){
                 for(int j=0;j<nTeams;j++){
 
-                    if(newIndividual.GetPositionValue(i, j, k)){
+                    if(newIndividual->GetPositionValue(i, j, k)){
                         in.push_back(i);
                         out.push_back(j);
 
-                        newIndividual.SetPositionValue(i,j,k,false);
+                        newIndividual->SetPositionValue(i,j,k,false);
                     }
                 }
             }
@@ -413,15 +490,12 @@ Individual Individual::Mutate(float mRate){
                     in.erase(in.begin()+r2);
                 }
 
-                newIndividual.SetPositionValue(iNew,jNew,k,true);
+                newIndividual->SetPositionValue(iNew,jNew,k,true);
             }
 
 
         }
     }
-
-    return newIndividual;
-
 }
 
 void Individual::SetAllele(int index, bool value){
@@ -609,6 +683,46 @@ int Individual::ValidateOneGamePerTeamPerRound(){
 //	std::cout << "ValidateGameOneTime: ok" << std::endl;
 
 	return 0;
+}
+
+int Individual::ValidateUniqueGame(){
+    GetTruePositionsInit();
+    int i0 = 0;
+    int j0 = 0;
+    int k0 = 0;
+
+    int i1 = 0;
+    int j1 = 0;
+    int k1 = 0;
+
+    for(int index=0; index < truePositionsLenght; index+=3){
+
+        i0 = truePositions[index];
+        j0 = truePositions[index+1];
+        k0 = truePositions[index+2];
+
+        for(int jndex=0; jndex < truePositionsLenght; jndex+=3){
+
+            if(index!=jndex){
+
+                i1 = truePositions[jndex];
+                j1 = truePositions[jndex+1];
+                k1 = truePositions[jndex+2];
+
+                if(i0 == i1 && j0 == j1)
+                {
+    //            std::cout << "ValidateUniqueGame: fault" << std::endl;
+    //            std::cout << " Games " << i0 << "vs" << j0 << " and ";
+    //            std::cout << i1 << "vs" << j1 << ", ";
+    //            std::cout << " can't happen" << std::endl;
+                    return 1;
+                }
+            }
+        }
+    }
+
+//    std::cout << "ValidateUniqueGame: ok" << std::endl;
+    return 0;
 }
 
 int Individual::ValidateMaxThreeGamesHome(){

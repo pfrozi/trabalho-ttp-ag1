@@ -8,6 +8,8 @@
 
 #include "Util.h"
 
+#define FIT_ERR pow(10.0,4.0)
+
 #ifndef INDIVIDUAL_H
 #define INDIVIDUAL_H
 
@@ -78,6 +80,10 @@ class Individual
         float       ObjectiveFunctionFirstRound();
         float       ObjectiveFunctionMidleRounds();
         float       ObjectiveFunctionLastRound();
+        int         ValidateUniqueGame();
+
+        void        MutationInRound(Individual* newIndividual, float mRate);
+        void        MutationRestrict(Individual* newIndividual, float mRate);
 };
 
 #endif // INDIVIDUAL_H

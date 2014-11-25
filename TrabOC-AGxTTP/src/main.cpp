@@ -175,7 +175,7 @@ int main(int argc, char* argv[])
                 } else if (argv[i] == argStr(ARGS_S)) {
 
                     stopTime = atoi(arg.c_str());
-                    cout << "Criterio de parada por tempo(min) carregado: " << stopQuant << endl;
+                    cout << "Criterio de parada por tempo(min) carregado: " << stopTime << endl;
 
                 } else if (argv[i] == argStr(ARGS_M_RATE)) {
 

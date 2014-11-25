@@ -65,3 +65,13 @@ int  GetRdmInt(int begin, int end){
     return(begin + (rand() % (end - begin)));
 
 }
+
+bool ExistItem(int size,int v[], int value){
+
+    for(int i=0;i<size;i++){
+        if(v[i]==value) return true;
+    }
+
+    return false;
+
+}
